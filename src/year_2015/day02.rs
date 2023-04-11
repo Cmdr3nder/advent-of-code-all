@@ -1,8 +1,7 @@
-use std::error::Error;
 use std::fs;
 use std::str::FromStr;
 
-use anyhow::{Context, Result};
+use anyhow::{Context, Error, Result};
 
 use crate::day::Day;
 
@@ -12,9 +11,9 @@ pub struct Day02;
 struct Present(u32, u32, u32);
 
 impl FromStr for Present {
-    type Err = Box<dyn Error>;
+    type Err = Error;
 
-    fn from_str(s: &str) -> Result<Self, <Self as FromStr>::Err> {
+    fn from_str(s: &str) -> Result<Self> {
         let mut parts = s.split('x');
         let mut present = Present(0, 0, 0);
         if let Some(part) = parts.next() {
@@ -48,7 +47,7 @@ fn min(a: u32, b: u32, c: u32) -> u32 {
 }
 
 impl Day for Day02 {
-    fn main() -> Result<(), Box<dyn Error>> {
+    fn main() -> Result<()> {
         let input = fs::read_to_string("input/2015/day02.txt")?;
         let mut wrapping_paper: u32 = 0;
         let mut ribbon: u32 = 0;

@@ -1,12 +1,13 @@
-use std::error::Error;
 use std::fs;
+
+use anyhow::Result;
 
 use crate::day::Day;
 
 pub struct Day01;
 
 impl Day for Day01 {
-    fn main() -> Result<(), Box<dyn Error>> {
+    fn main() -> Result<()> {
         let input = fs::read_to_string("input/2015/day01.txt")?;
         let mut floor: i64 = 0;
         let mut pos: usize = 0;

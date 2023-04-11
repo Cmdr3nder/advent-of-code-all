@@ -2,12 +2,13 @@ mod day;
 mod year_2015;
 
 use std::env;
-use std::error::Error;
+
+use anyhow::Result;
 
 use crate::day::Day;
 use crate::year_2015::{Day01 as y2015_d1, Day02 as y2015_d2};
 
-fn main() -> Result<(), Box<dyn Error>> {
+fn main() -> Result<()> {
     for argument in env::args() {
         match argument.as_str() {
             "2015-01" => y2015_d1::main()?,
