@@ -1,5 +1,5 @@
 use std::fs::File;
-use std::io::{BufReader, BufRead};
+use std::io::{BufRead, BufReader};
 use std::str::FromStr;
 
 use anyhow::{Context, Error, Result};
@@ -60,9 +60,7 @@ impl Day for Day02 {
                 present.2 + present.0,
             );
             wrapping_paper += (2
-                * ((present.0 * present.1)
-                    + (present.1 * present.2)
-                    + (present.2 * present.0)))
+                * ((present.0 * present.1) + (present.1 * present.2) + (present.2 * present.0)))
                 + smallest_side_area;
             ribbon += (present.0 * present.1 * present.2) + smallest_side_perim;
         }
