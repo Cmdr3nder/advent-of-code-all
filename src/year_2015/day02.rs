@@ -2,6 +2,7 @@ use std::fs;
 use std::str::FromStr;
 
 use anyhow::{Context, Error, Result};
+use lazy_regex::regex_captures;
 
 use crate::day::Day;
 
@@ -14,25 +15,16 @@ impl FromStr for Present {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self> {
-        let mut parts = s.split('x');
-        let mut present = Present(0, 0, 0);
-        if let Some(part) = parts.next() {
-            present.0 = part
-                .parse()
-                .with_context(|| format!("Failed to parse part 1 '{part}' in '{s}'"))?;
-        }
-        if let Some(part) = parts.next() {
-            present.1 = part
-                .parse()
-                .with_context(|| format!("Failed to parse part 2 '{part}' in '{s}'"))?;
-        }
-        if let Some(part) = parts.next() {
-            present.2 = part
-                .parse()
-                .with_context(|| format!("Failed to parse part 3 '{part}' in '{s}'"))?;
-        }
-        // TODO: chuck an error if additional parts exist
-        Ok(present)
+        let (_, l, w, h) = regex_captures!("([0-9]+)x([0-9]+)x([0-9]+)", s)
+            .with_context(|| format!("Unexpected '{s}', expected LxWxH"))?;
+        Ok(Present(
+            l.parse()
+                .with_context(|| format!("Failed to parse '{l}' in '{s}'"))?,
+            w.parse()
+                .with_context(|| format!("Failed to parse '{l}' in '{s}'"))?,
+            h.parse()
+                .with_context(|| format!("Failed to parse '{l}' in '{s}'"))?,
+        ))
     }
 }
 
