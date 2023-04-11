@@ -44,25 +44,26 @@ impl Day for Day02 {
         let mut wrapping_paper: u32 = 0;
         let mut ribbon: u32 = 0;
         for line in input.split('\n') {
-            if line.len() > 0 {
-                let present: Present = line.parse()?;
-                let smallest_side_area = min(
-                    present.0 * present.1,
-                    present.1 * present.2,
-                    present.2 * present.0,
-                );
-                let smallest_side_perim = 2 * min(
-                    present.0 + present.1,
-                    present.1 + present.2,
-                    present.2 + present.0,
-                );
-                wrapping_paper += (2
-                    * ((present.0 * present.1)
-                        + (present.1 * present.2)
-                        + (present.2 * present.0)))
-                    + smallest_side_area;
-                ribbon += (present.0 * present.1 * present.2) + smallest_side_perim;
+            if line.is_empty() {
+                continue;
             }
+            let present: Present = line.parse()?;
+            let smallest_side_area = min(
+                present.0 * present.1,
+                present.1 * present.2,
+                present.2 * present.0,
+            );
+            let smallest_side_perim = 2 * min(
+                present.0 + present.1,
+                present.1 + present.2,
+                present.2 + present.0,
+            );
+            wrapping_paper += (2
+                * ((present.0 * present.1)
+                    + (present.1 * present.2)
+                    + (present.2 * present.0)))
+                + smallest_side_area;
+            ribbon += (present.0 * present.1 * present.2) + smallest_side_perim;
         }
         println!("Total Wrapping Paper SqFt {wrapping_paper}");
         println!("Feet of Ribbon {ribbon}");
