@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.70"
 lazy-regex = "2.5.0"
+md5 = "0.7.0"
