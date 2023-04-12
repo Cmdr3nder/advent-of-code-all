@@ -7,7 +7,10 @@ use std::env;
 use anyhow::Result;
 
 use crate::day::Day;
-use crate::year_2015::{Day01 as y2015_d01, Day02 as y2015_d02, Day03 as y2015_d03, Day04 as y2015_d04};
+use crate::year_2015::{
+    Day01 as y2015_d01, Day02 as y2015_d02, Day03 as y2015_d03, Day04 as y2015_d04,
+    Day05 as y2015_d05,
+};
 
 fn main() -> Result<()> {
     for argument in env::args() {
@@ -16,6 +19,7 @@ fn main() -> Result<()> {
             "2015-02" => y2015_d02::main()?,
             "2015-03" => y2015_d03::main()?,
             "2015-04" => y2015_d04::main()?,
+            "2015-05" => y2015_d05::main()?,
             "target/debug/advent-of-code-all" => {}
             x => println!("Unrecognized Argument: '{x}'"),
         };
