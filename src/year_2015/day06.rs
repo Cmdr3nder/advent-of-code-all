@@ -9,7 +9,8 @@ use crate::day::Day;
 
 pub struct Day06;
 
-const dimensions: Point2D<usize> = Point2D::new(1000 - 1, 1000 - 1);
+const DIMENSIONS: (Point2D<usize>, Point2D<usize>) =
+    (Point2D::new(0, 0), Point2D::new(1000 - 1, 1000 - 1));
 
 impl Day for Day06 {
     fn main() -> Result<()> {
@@ -25,13 +26,24 @@ impl Day for Day06 {
             let from = Point2D::<usize>::new(x1.parse()?, y1.parse()?);
             let to = Point2D::<usize>::new(x2.parse()?, y2.parse()?);
             for p in from.iter_to(&to) {
+                let idx = p.to_index(&DIMENSIONS).unwrap();
                 match action {
                     "turn on" => {
-                        lights_bool[p.to_index(&dimensions)];
+                        lights_bool[idx] = true;
+                        lights_num[idx] += 1;
                     }
-                    "toggle" => {}
-                    "turn off" => {}
-                    _ => {}
+                    "toggle" => {
+                        lights_bool[idx] = !lights_bool[idx];
+                        lights_num[idx] += 2;
+                    }
+                    "turn off" => {
+                        lights_bool[idx] = false;
+                        lights_num[idx] = match lights_num[idx] {
+                            0 => 0,
+                            x => x - 1,
+                        };
+                    }
+                    _ => panic!("Unexpected instruction"),
                 }
             }
         }
