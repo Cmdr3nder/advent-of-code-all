@@ -4,7 +4,7 @@ use std::io::{BufRead, BufReader};
 use anyhow::{bail, Result};
 
 use crate::day::Day;
-use crate::util::IsHex;
+use crate::util::is_hex::IsHex;
 
 pub struct Day08;
 
