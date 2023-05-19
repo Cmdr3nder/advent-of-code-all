@@ -5,16 +5,11 @@ use std::io::{BufRead, BufReader};
 use anyhow::{bail, Context, Result};
 use lazy_regex::regex_captures;
 
+use crate::data::StringIdMap;
 use crate::day::Day;
 use crate::util::peek::Peek;
 
 pub struct Day09;
-
-#[derive(Debug, Default)]
-struct Destinations {
-    map: HashMap<String, usize>,
-    next_id: usize,
-}
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 struct Route {
@@ -32,41 +27,23 @@ impl Route {
     }
 }
 
-impl Destinations {
-    fn to_id(&mut self, destination: &str) -> usize {
-        match self.map.get(destination) {
-            Some(id) => *id,
-            None => {
-                let id = self.next_id;
-                self.next_id += 1;
-                self.map.insert(destination.to_string(), id);
-                id
-            }
-        }
-    }
-
-    fn to_route(&mut self, a: &str, b: &str) -> Route {
-        let a = self.to_id(a);
-        let b = self.to_id(b);
-        Route::new(a, b)
-    }
-
-    fn count(&self) -> usize {
-        self.next_id
-    }
+fn to_route(destinations: &mut StringIdMap, a: &str, b: &str) -> Route {
+    let a = destinations.to_id(a);
+    let b = destinations.to_id(b);
+    Route::new(a, b)
 }
 
 impl Day for Day09 {
     fn main() -> Result<()> {
         let input = BufReader::new(File::open("input/2015/day09.txt")?);
-        let mut destinations = Destinations::default();
+        let mut destinations = StringIdMap::default();
         let mut edges: HashMap<Route, usize> = HashMap::new();
         let mut connections: HashMap<usize, Vec<usize>> = HashMap::new();
         for line in input.lines().map(|l| l.unwrap()) {
             let (_, a, b, length) = regex_captures!("(.+) to (.+) = ([0-9]+)", &line)
                 .with_context(|| format!("Failed to match line regex {line}"))?;
             let length: usize = length.parse()?;
-            let route = destinations.to_route(a, b);
+            let route = to_route(&mut destinations, a, b);
             let a = destinations.to_id(a);
             let b = destinations.to_id(b);
             if let Some(_) = edges.insert(route, length) {
