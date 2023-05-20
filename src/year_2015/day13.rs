@@ -4,38 +4,41 @@ use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
 use lazy_regex::regex_captures;
-use permute::permute;
 
 use crate::data::StringIdMap;
 use crate::day::Day;
 
 pub struct Day13;
 
+fn pair_happiness(happiness_chart: &HashMap<(usize, usize), i64>, a: usize, b: usize) -> i64 {
+    happiness_chart.get(&(a, b)).unwrap_or(&0) + happiness_chart.get(&(b, a)).unwrap_or(&0)
+}
+
 fn find_best_happiness(
     people: &StringIdMap,
     happiness_chart: &HashMap<(usize, usize), i64>,
 ) -> i64 {
+    let mut sequences: Vec<Vec<usize>> = vec![Vec::new()];
+    for i in 0..people.count() {
+        let mut new_sequences = Vec::new();
+        for sequence in sequences {
+            for j in 0..=sequence.len() {
+                let mut s = sequence.clone();
+                s.insert(j, i);
+                new_sequences.push(s);
+            }
+        }
+        sequences = new_sequences
+    }
     let mut best_happiness = i64::MIN;
-    for permutation in permute((0..people.count()).collect::<Vec<usize>>()) {
-        let mut happiness: i64 = 0;
-        for p_idx in 0..permutation.len() {
-            let person = permutation[p_idx];
-            let left_neighbor = if p_idx == 0 {
-                permutation.len() - 1
-            } else {
-                p_idx - 1
-            };
-            let left_neighbor = permutation[left_neighbor];
-            let right_neighbor = permutation[(p_idx + 1) % permutation.len()];
-            let left_happiness: i64 = happiness_chart
-                .get(&(person, left_neighbor))
-                .map(|h| *h)
-                .unwrap_or(0);
-            let right_happiness: i64 = happiness_chart
-                .get(&(person, right_neighbor))
-                .map(|h| *h)
-                .unwrap_or(0);
-            happiness += left_happiness + right_happiness;
+    for sequence in sequences {
+        let mut happiness = 0;
+        for i in 0..sequence.len() {
+            happiness += pair_happiness(
+                happiness_chart,
+                sequence[i],
+                sequence[(i + 1) % sequence.len()],
+            );
         }
         if happiness > best_happiness {
             best_happiness = happiness;
