@@ -12,7 +12,7 @@ use crate::year_2015::{
     Day01 as y2015_d01, Day02 as y2015_d02, Day03 as y2015_d03, Day04 as y2015_d04,
     Day05 as y2015_d05, Day06 as y2015_d06, Day07 as y2015_d07, Day08 as y2015_d08,
     Day09 as y2015_d09, Day10 as y2015_d10, Day11 as y2015_d11, Day12 as y2015_d12,
-    Day13 as y2015_d13, Day14 as y2015_d14, Day15 as y2015_d15
+    Day13 as y2015_d13, Day14 as y2015_d14, Day15 as y2015_d15,
 };
 
 fn main() -> Result<()> {
