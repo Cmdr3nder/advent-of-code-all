@@ -47,11 +47,7 @@ impl Add<Ingredient> for Ingredient {
 }
 
 fn simple_score(cookie: Ingredient) -> i32 {
-    if cookie.capacity > 0
-        && cookie.durability > 0
-        && cookie.flavor > 0
-        && cookie.texture > 0
-    {
+    if cookie.capacity > 0 && cookie.durability > 0 && cookie.flavor > 0 && cookie.texture > 0 {
         cookie.capacity * cookie.durability * cookie.flavor * cookie.texture
     } else {
         0
@@ -66,7 +62,12 @@ fn calorie_score(cookie: Ingredient) -> i32 {
     }
 }
 
-fn best_cookie(cookie: Ingredient, ingredients: &[Ingredient], teaspoons: i32, score_fn: &dyn Fn(Ingredient) -> i32) -> i32 {
+fn best_cookie(
+    cookie: Ingredient,
+    ingredients: &[Ingredient],
+    teaspoons: i32,
+    score_fn: &dyn Fn(Ingredient) -> i32,
+) -> i32 {
     if ingredients.len() < 1 {
         score_fn(cookie)
     } else if ingredients.len() == 1 {
@@ -74,7 +75,12 @@ fn best_cookie(cookie: Ingredient, ingredients: &[Ingredient], teaspoons: i32, s
     } else {
         let mut best = 0;
         for t in 0..=teaspoons {
-            let next = best_cookie(cookie + (ingredients[0] * t), &ingredients[1..], teaspoons - t, score_fn);
+            let next = best_cookie(
+                cookie + (ingredients[0] * t),
+                &ingredients[1..],
+                teaspoons - t,
+                score_fn,
+            );
             if next > best {
                 best = next;
             }
@@ -91,7 +97,7 @@ impl Day for Day15 {
             let (_, _name, capacity, durability, flavor, texture, calories) = regex_captures!(
                 "([A-Za-z]+): capacity ([-0-9]+), durability ([-0-9]+), flavor ([-0-9]+), texture ([-0-9]+), calories ([-0-9]+)",
                 &line,
-            ).with_context(|| "Could not ingredient stats")?;
+            ).with_context(|| "Could not parse ingredient stats")?;
             ingredients.push(Ingredient {
                 capacity: capacity.parse()?,
                 durability: durability.parse()?,
