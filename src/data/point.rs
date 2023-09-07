@@ -1,6 +1,6 @@
 use std::default::Default;
 use std::iter::Iterator;
-use std::ops::{AddAssign, Sub};
+use std::ops::{Add, AddAssign, Sub};
 
 #[derive(Clone, Copy, Eq, Hash, Debug, Default, PartialEq)]
 pub struct Point2D<T> {
@@ -12,6 +12,14 @@ impl<T: AddAssign> AddAssign<(T, T)> for Point2D<T> {
     fn add_assign(&mut self, vector: (T, T)) {
         self.x += vector.0;
         self.y += vector.1;
+    }
+}
+
+impl<T: Add<Output = T>> Add<(T, T)> for Point2D<T> {
+    type Output = Point2D<T>;
+
+    fn add(self, vector: (T, T)) -> Point2D<T> {
+        Point2D::new(self.x + vector.0, self.y + vector.1)
     }
 }
 

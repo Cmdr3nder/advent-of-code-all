@@ -32,7 +32,7 @@ impl Day for Day17 {
         println!("150 liter fill count: {:?}", fills.len());
         let mut min_containers = u32::MAX;
         let mut instances = 0;
-        for (count, fill) in fills {
+        for (count, _) in fills {
             if count < min_containers {
                 min_containers = count;
                 instances = 1;
