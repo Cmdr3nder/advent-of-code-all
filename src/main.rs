@@ -13,6 +13,7 @@ use crate::year_2015::{
     Day05 as y2015_d05, Day06 as y2015_d06, Day07 as y2015_d07, Day08 as y2015_d08,
     Day09 as y2015_d09, Day10 as y2015_d10, Day11 as y2015_d11, Day12 as y2015_d12,
     Day13 as y2015_d13, Day14 as y2015_d14, Day15 as y2015_d15, Day16 as y2015_d16,
+    Day17 as y2015_d17,
 };
 
 fn main() -> Result<()> {
@@ -34,6 +35,7 @@ fn main() -> Result<()> {
             "2015-14" => y2015_d14::main()?,
             "2015-15" => y2015_d15::main()?,
             "2015-16" => y2015_d16::main()?,
+            "2015-17" => y2015_d17::main()?,
             "target/debug/advent-of-code-all" => {}
             x => println!("Unrecognized Argument: '{x}'"),
         };

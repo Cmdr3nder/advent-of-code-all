@@ -37,28 +37,28 @@ fn lt(expected: Option<i32>, actual: Option<i32>) -> bool {
 
 fn match_simple(expected: Aunt, actual: Aunt) -> bool {
     eq(expected.akitas, actual.akitas)
-    && eq(expected.cars, actual.cars)
-    && eq(expected.cats, actual.cats)
-    && eq(expected.children, actual.children)
-    && eq(expected.goldfish, actual.goldfish)
-    && eq(expected.samoyeds, actual.samoyeds)
-    && eq(expected.trees, actual.trees)
-    && eq(expected.vizslas, actual.vizslas)
-    && eq(expected.pomeranians, actual.pomeranians)
-    && eq(expected.perfumes, actual.perfumes)
+        && eq(expected.cars, actual.cars)
+        && eq(expected.cats, actual.cats)
+        && eq(expected.children, actual.children)
+        && eq(expected.goldfish, actual.goldfish)
+        && eq(expected.samoyeds, actual.samoyeds)
+        && eq(expected.trees, actual.trees)
+        && eq(expected.vizslas, actual.vizslas)
+        && eq(expected.pomeranians, actual.pomeranians)
+        && eq(expected.perfumes, actual.perfumes)
 }
 
 fn match_complex(expected: Aunt, actual: Aunt) -> bool {
     eq(expected.akitas, actual.akitas)
-    && eq(expected.cars, actual.cars)
-    && gt(expected.cats, actual.cats)
-    && eq(expected.children, actual.children)
-    && lt(expected.goldfish, actual.goldfish)
-    && eq(expected.samoyeds, actual.samoyeds)
-    && gt(expected.trees, actual.trees)
-    && eq(expected.vizslas, actual.vizslas)
-    && lt(expected.pomeranians, actual.pomeranians)
-    && eq(expected.perfumes, actual.perfumes)
+        && eq(expected.cars, actual.cars)
+        && gt(expected.cats, actual.cats)
+        && eq(expected.children, actual.children)
+        && lt(expected.goldfish, actual.goldfish)
+        && eq(expected.samoyeds, actual.samoyeds)
+        && gt(expected.trees, actual.trees)
+        && eq(expected.vizslas, actual.vizslas)
+        && lt(expected.pomeranians, actual.pomeranians)
+        && eq(expected.perfumes, actual.perfumes)
 }
 
 impl Day for Day16 {
@@ -78,10 +78,8 @@ impl Day for Day16 {
         };
         let input = BufReader::new(File::open("input/2015/day16.txt")?);
         for line in input.lines().map(|l| l.unwrap()) {
-            let (_, num, stats) = regex_captures!(
-                "^Sue ([0-9]+): (.*)$",
-                &line,
-            ).with_context(|| "Could not parse Sue")?;
+            let (_, num, stats) = regex_captures!("^Sue ([0-9]+): (.*)$", &line,)
+                .with_context(|| "Could not parse Sue")?;
             let mut aunt = Aunt::default();
             aunt.num = num.parse()?;
             for stat in stats.split(", ") {
