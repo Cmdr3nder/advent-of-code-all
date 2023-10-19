@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-use anyhow::{bail, Context, Result};
+use anyhow::{bail, Result};
 use lazy_regex::regex_captures;
 use priority_queue::PriorityQueue;
 
