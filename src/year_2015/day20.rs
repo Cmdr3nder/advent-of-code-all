@@ -7,14 +7,17 @@ use crate::day::Day;
 
 pub struct Day20;
 
-fn sum_of_divisors(num: usize) -> usize {
+fn sum_of_divisors<F>(num: usize, filter: F) -> usize where
+    F: Fn(usize, usize) -> bool {
     let mut n = num.integer_sqrt();
     let mut sum = 0;
     while n >= 1 {
         if num % n == 0 {
-            sum += n;
+            if filter(num, n) {
+                sum += n;
+            }
             let d = num / n;
-            if d != n {
+            if d != n && filter(num, d) {
                 sum += d;
             }
         }
@@ -23,16 +26,26 @@ fn sum_of_divisors(num: usize) -> usize {
     sum
 }
 
-fn present_count(house_num: usize) -> usize {
-    sum_of_divisors(house_num) * 10
+fn present_count<F>(house_num: usize, filter: F, mult: usize) -> usize where
+    F: Fn(usize, usize) -> bool {
+    sum_of_divisors(house_num, filter) * mult
 }
 
 impl Day for Day20 {
     fn main() -> Result<()> {
         let presents: usize = fs::read_to_string("input/2015/day20.txt")?.trim().parse()?;
+        let mut d1 = false;
+        let mut d2 = false;
         for house_num in 1..=presents {
-            if present_count(house_num) >= presents {
+            if !d1 && present_count(house_num, |_, _| true, 10) >= presents {
                 println!("lowest house number: {house_num}");
+                d1 = true;
+            }
+            if !d2 && present_count(house_num, |num, d| d * 50 >= num, 11) >= presents {
+                println!("new lowest house number: {house_num}");
+                d2 = true;
+            }
+            if d1 && d2 {
                 break;
             }
         }
