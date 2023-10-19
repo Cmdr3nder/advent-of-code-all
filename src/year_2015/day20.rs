@@ -1,17 +1,22 @@
 use std::fs;
 
 use anyhow::{bail, Context, Result};
+use integer_sqrt::IntegerSquareRoot;
 
 use crate::day::Day;
 
 pub struct Day20;
 
 fn sum_of_divisors(num: usize) -> usize {
-    let mut n = num;
+    let mut n = num.integer_sqrt();
     let mut sum = 0;
     while n >= 1 {
         if num % n == 0 {
             sum += n;
+            let d = num / n;
+            if d != n {
+                sum += d;
+            }
         }
         n -= 1;
     }
@@ -29,13 +34,12 @@ impl Day for Day20 {
             if present_count(house_num) >= presents {
                 println!("lowest house number: {house_num}");
                 break;
-            } else if house_num % 1000 == 0 {
-                println!("searched {house_num}");
             }
         }
         Ok(())
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -65,9 +69,12 @@ mod tests {
             (20, 42),
         ];
         for (num, expected) in data {
-            let actual = sum_of_divisors(num); 
-            assert_eq!(actual, expected, "Got {}, but expected {} when calling sum_of_divisors({})", actual, expected, num);
+            let actual = sum_of_divisors(num);
+            assert_eq!(
+                actual, expected,
+                "Got {}, but expected {} when calling sum_of_divisors({})",
+                actual, expected, num
+            );
         }
     }
 }
-
