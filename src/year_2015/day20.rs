@@ -7,40 +7,15 @@ use crate::day::Day;
 pub struct Day20;
 
 fn sum_of_divisors(num: usize) -> usize {
-    let mut num = num;
-    let mut total = 1;
-
-    let mut i = 2;
-    while i * i <= num {
-        if num % i == 0 {
-            let mut e = 0;
-            loop {
-                e += 1;
-                num /= i;
-                if num % i != 0 {
-                    break;
-                }
-            }
-
-            let mut sum = 0;
-            let mut pow = 1;
-            loop {
-                sum += pow;
-                pow *= i;
-                e -= 1;
-                if e <= 0 {
-                    break;
-                }
-            }
-            total *= sum;
+    let mut n = num;
+    let mut sum = 0;
+    while n >= 1 {
+        if num % n == 0 {
+            sum += n;
         }
-        i += 1;
+        n -= 1;
     }
-    if num > 1 {
-        total *= 1 + num;
-    }
-
-    total
+    sum
 }
 
 fn present_count(house_num: usize) -> usize {
@@ -85,7 +60,7 @@ mod tests {
             (15, 24),
             (16, 31),
             (17, 18),
-            (18, 30),
+            (18, 39),
             (19, 20),
             (20, 42),
         ];
