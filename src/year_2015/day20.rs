@@ -1,14 +1,16 @@
 use std::fs;
 
-use anyhow::{bail, Context, Result};
+use anyhow::Result;
 use integer_sqrt::IntegerSquareRoot;
 
 use crate::day::Day;
 
 pub struct Day20;
 
-fn sum_of_divisors<F>(num: usize, filter: F) -> usize where
-    F: Fn(usize, usize) -> bool {
+fn sum_of_divisors<F>(num: usize, filter: F) -> usize
+where
+    F: Fn(usize, usize) -> bool,
+{
     let mut n = num.integer_sqrt();
     let mut sum = 0;
     while n >= 1 {
@@ -26,8 +28,10 @@ fn sum_of_divisors<F>(num: usize, filter: F) -> usize where
     sum
 }
 
-fn present_count<F>(house_num: usize, filter: F, mult: usize) -> usize where
-    F: Fn(usize, usize) -> bool {
+fn present_count<F>(house_num: usize, filter: F, mult: usize) -> usize
+where
+    F: Fn(usize, usize) -> bool,
+{
     sum_of_divisors(house_num, filter) * mult
 }
 
