@@ -14,6 +14,7 @@ pub struct Day22;
 struct Game {
     boss_damage: u32,
     boss_health: u32,
+    drain: u32,
     mana_history: u32,
     player_health: u32,
     player_mana: u32,
@@ -32,6 +33,7 @@ impl Game {
         Game {
             boss_damage: 0,
             boss_health: 0,
+            drain: 0,
             mana_history: 0,
             player_health: 50,
             player_mana: 500,
@@ -97,6 +99,12 @@ impl Game {
         game
     }
 
+    fn drain_health(&self) -> Self {
+        let mut game = *self;
+        game.player_health = game.player_health.saturating_sub(game.drain);
+        game
+    }
+
     fn heal_player(&self, health: u32) -> Self {
         let mut game = *self;
         game.player_health += health;
@@ -142,6 +150,65 @@ impl Game {
     }
 }
 
+fn find_best_mana_path(game: Game) -> u32 {
+    let mut games = PriorityQueue::new();
+    games.push(game, Reverse(game.mana_history));
+    let mut best_mana = u32::MAX;
+    while let Some((game, _)) = games.pop() {
+        if game.mana_history >= best_mana {
+            // Don't need to chase down worse options
+            continue;
+        }
+        let game = game.drain_health(); 
+        if game.player_health == 0 {
+            continue;
+        }
+        let game = game.start_turn(); // Start Player Turn
+        if game.boss_health == 0 {
+            if game.mana_history < best_mana {
+                best_mana = game.mana_history;
+            }
+            continue;
+        }
+        let possible_games = [
+            // Do Player Action
+            game.cast_magic_missile(),
+            game.cast_drain(),
+            game.cast_shield(),
+            game.cast_poison(),
+            game.cast_recharge(),
+        ];
+        for game in possible_games {
+            if let Some(game) = game {
+                if game.player_mana == 0 {
+                    continue;
+                }
+                if game.boss_health == 0 {
+                    if game.mana_history < best_mana {
+                        best_mana = game.mana_history;
+                    }
+                    continue;
+                }
+                let mut game = game.end_turn(); // End Player Turn
+                game = game.start_turn(); // Start Boss Turn
+                if game.boss_health == 0 {
+                    if game.mana_history < best_mana {
+                        best_mana = game.mana_history;
+                    }
+                    continue;
+                }
+                game = game.damage_player();
+                if game.player_health == 0 {
+                    continue;
+                }
+                game = game.end_turn(); // End Boss Turn
+                games.push(game, Reverse(game.mana_history));
+            }
+        }
+    }
+    best_mana
+}
+
 impl Day for Day22 {
     fn main() -> Result<()> {
         let input = BufReader::new(File::open("input/2015/day22.txt")?);
@@ -154,61 +221,17 @@ impl Day for Day22 {
                 game.boss_health = health.parse()?;
             }
         }
-        let mut games = PriorityQueue::new();
-        games.push(game, Reverse(game.mana_history));
-        let mut best_mana = u32::MAX;
-        while let Some((game, _)) = games.pop() {
-            if game.mana_history >= best_mana {
-                // Don't need to chase down worse options
-                continue;
-            }
-            let game = game.start_turn(); // Start Player Turn
-            if game.boss_health == 0 {
-                if game.mana_history < best_mana {
-                    best_mana = game.mana_history;
-                }
-                continue;
-            }
-            let possible_games = [
-                // Do Player Action
-                game.cast_magic_missile(),
-                game.cast_drain(),
-                game.cast_shield(),
-                game.cast_poison(),
-                game.cast_recharge(),
-            ];
-            for game in possible_games {
-                if let Some(game) = game {
-                    if game.player_mana == 0 {
-                        continue;
-                    }
-                    if game.boss_health == 0 {
-                        if game.mana_history < best_mana {
-                            best_mana = game.mana_history;
-                        }
-                        continue;
-                    }
-                    let mut game = game.end_turn(); // End Player Turn
-                    game = game.start_turn(); // Start Boss Turn
-                    if game.boss_health == 0 {
-                        if game.mana_history < best_mana {
-                            best_mana = game.mana_history;
-                        }
-                        continue;
-                    }
-                    game = game.damage_player();
-                    if game.player_health == 0 {
-                        continue;
-                    }
-                    game = game.end_turn(); // End Boss Turn
-                    games.push(game, Reverse(game.mana_history));
-                }
-            }
-        }
+        let best_mana = find_best_mana_path(game);
         if best_mana == u32::MAX {
             println!("Kobayashi Maru!");
         }
         println!("Best mana to win: {best_mana}");
+        game.drain = 1;
+        let best_mana = find_best_mana_path(game);
+        if best_mana == u32::MAX {
+            println!("Kobayashi Maru!");
+        }
+        println!("Best mana to win with drain: {best_mana}");
         Ok(())
     }
 }
