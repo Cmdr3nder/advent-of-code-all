@@ -159,7 +159,7 @@ fn find_best_mana_path(game: Game) -> u32 {
             // Don't need to chase down worse options
             continue;
         }
-        let game = game.drain_health(); 
+        let game = game.drain_health();
         if game.player_health == 0 {
             continue;
         }
