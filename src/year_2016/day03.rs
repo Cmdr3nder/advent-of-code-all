@@ -1,7 +1,7 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-use anyhow::{bail, Result};
+use anyhow::Result;
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
