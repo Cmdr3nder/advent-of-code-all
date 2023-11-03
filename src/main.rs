@@ -18,7 +18,7 @@ use crate::year_2015::{
     Day21 as y2015_d21, Day22 as y2015_d22, Day23 as y2015_d23, Day24 as y2015_d24,
     Day25 as y2015_d25,
 };
-use crate::year_2016::{Day01 as y2016_d01, Day02 as y2016_d02};
+use crate::year_2016::{Day01 as y2016_d01, Day02 as y2016_d02, Day03 as y2016_d03};
 
 fn main() -> Result<()> {
     for argument in env::args() {
@@ -50,7 +50,7 @@ fn main() -> Result<()> {
             "2015-25" => y2015_d25::main()?,
             "2016-01" => y2016_d01::main()?,
             "2016-02" => y2016_d02::main()?,
-            // "2016-03" => y2016_d03::main()?,
+            "2016-03" => y2016_d03::main()?,
             // "2016-04" => y2016_d04::main()?,
             // "2016-05" => y2016_d05::main()?,
             // "2016-06" => y2016_d06::main()?,
