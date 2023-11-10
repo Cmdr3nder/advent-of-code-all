@@ -1,4 +1,3 @@
-// pub mod a_star;
+pub mod expand;
 pub mod is_hex;
-// pub mod priority_queue;
 pub mod peek;

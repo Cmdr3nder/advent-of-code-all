@@ -86,7 +86,7 @@ mod tests {
             (20, 42),
         ];
         for (num, expected) in data {
-            let actual = sum_of_divisors(num);
+            let actual = sum_of_divisors(num, |_, _| true);
             assert_eq!(
                 actual, expected,
                 "Got {}, but expected {} when calling sum_of_divisors({})",
