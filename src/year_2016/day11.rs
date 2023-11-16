@@ -5,11 +5,12 @@ use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
 use lazy_regex::{regex, regex_captures};
-use priority_queue::PriorityQueue;
 
 use crate::data::StringIdMap;
 use crate::day::Day;
 use crate::util::expand::expand;
+use crate::util::ordered_vec::OrderedVec;
+use crate::util::priority_queue::PriorityQueue;
 
 #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
 enum Device {
@@ -66,13 +67,13 @@ enum NormalizedDevice {
 
 #[derive(Clone, Debug, Default, Eq, Hash, PartialEq)]
 struct State {
-    floors: Vec<Vec<Device>>,
+    floors: Vec<OrderedVec<Device>>,
     elevator_floor: usize,
 }
 
 #[derive(Eq, Hash, PartialEq)]
 struct NormalizedState {
-    floors: Vec<Vec<NormalizedDevice>>,
+    floors: Vec<OrderedVec<NormalizedDevice>>,
     elevator_floor: usize,
 }
 
@@ -134,7 +135,6 @@ impl State {
                     let a = new_state.floors[new_state.elevator_floor].remove(i);
                     new_state.floors[upper].push(a);
                     new_state.floors[upper].push(b);
-                    new_state.floors[upper].sort();
                     new_state.elevator_floor = upper;
                     if new_state.valid() {
                         new_states.push(new_state);
@@ -149,7 +149,6 @@ impl State {
                     let mut new_state = self.clone();
                     let moved = new_state.floors[new_state.elevator_floor].remove(i);
                     new_state.floors[upper].push(moved);
-                    new_state.floors[upper].sort();
                     new_state.elevator_floor = upper;
                     if new_state.valid() {
                         new_states.push(new_state);
@@ -174,7 +173,6 @@ impl State {
                     let mut new_state = self.clone();
                     let moved = new_state.floors[new_state.elevator_floor].remove(i);
                     new_state.floors[lower].push(moved);
-                    new_state.floors[lower].sort();
                     new_state.elevator_floor = lower;
                     if new_state.valid() {
                         new_states.push(new_state);
@@ -191,7 +189,6 @@ impl State {
                             let a = new_state.floors[new_state.elevator_floor].remove(i);
                             new_state.floors[lower].push(a);
                             new_state.floors[lower].push(b);
-                            new_state.floors[lower].sort();
                             new_state.elevator_floor = lower;
                             if new_state.valid() {
                                 new_states.push(new_state);
@@ -224,8 +221,11 @@ impl State {
     }
 
     fn normalize(&self) -> NormalizedState {
-        let floors: Vec<Vec<NormalizedDevice>> =
-            self.floors.iter().map(|f| normalize_devices(f)).collect();
+        let floors: Vec<OrderedVec<NormalizedDevice>> = self
+            .floors
+            .iter()
+            .map(|f| normalize_devices(f.as_slice()))
+            .collect();
         NormalizedState {
             floors,
             elevator_floor: self.elevator_floor,
@@ -233,13 +233,13 @@ impl State {
     }
 }
 
-fn normalize_devices(devices: &[Device]) -> Vec<NormalizedDevice> {
+fn normalize_devices(devices: &[Device]) -> OrderedVec<NormalizedDevice> {
     match devices.len() {
-        0 => Vec::new(),
-        1 => vec![devices[0].normalize()],
+        0 => OrderedVec::new(),
+        1 => OrderedVec::from_one(devices[0].normalize()),
         len => {
             // 2+
-            let mut res = Vec::new();
+            let mut res = OrderedVec::new();
             let mut i = 0;
             while i < len - 1 {
                 if devices[i].is_pair(&devices[i + 1]) {
@@ -253,33 +253,38 @@ fn normalize_devices(devices: &[Device]) -> Vec<NormalizedDevice> {
             if i < devices.len() {
                 res.push(devices[i].normalize());
             }
-            res.sort();
             res
         }
     }
 }
 
-#[derive(Clone, Copy, Debug, Default, PartialEq, Ord, Eq)]
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 struct StatePriority {
     closeness: usize,
     steps: usize,
 }
 
-impl PartialOrd for StatePriority {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+impl Ord for StatePriority {
+    fn cmp(&self, other: &Self) -> Ordering {
         if self.steps == other.steps {
             if self.closeness == other.closeness {
-                Some(Ordering::Equal)
+                Ordering::Equal
             } else if self.closeness < other.closeness {
-                Some(Ordering::Less)
+                Ordering::Less
             } else {
-                Some(Ordering::Greater)
+                Ordering::Greater
             }
         } else if self.steps < other.steps {
-            Some(Ordering::Greater)
+            Ordering::Greater
         } else {
-            Some(Ordering::Less)
+            Ordering::Less
         }
+    }
+}
+
+impl PartialOrd for StatePriority {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
@@ -307,7 +312,6 @@ fn read_input() -> Result<(State, StringIdMap)> {
                 let id = keywords.to_id(&caps[1]);
                 state.floors[floor].push(Device::Generator(id));
             }
-            state.floors[floor].sort();
         }
     }
     Ok((state, keywords))
@@ -319,15 +323,11 @@ fn minimum_steps(initial_state: &State) -> usize {
     states.push(initial_state.clone(), StatePriority::default());
     while let Some((state, priority)) = states.pop() {
         let normalized = state.normalize();
-        if !seen.contains(&normalized) {
-            seen.insert(normalized);
-        } else {
+        if seen.contains(&normalized) {
             // Don't reprocess the same state again
             continue;
-        }
-        if !state.valid() {
-            // Don't process an invalid state
-            continue;
+        } else {
+            seen.insert(normalized);
         }
         if state.complete() {
             return priority.steps;
@@ -359,7 +359,6 @@ impl Day for Day11 {
         initial_state.floors[0].push(Device::Microchip(elerium));
         initial_state.floors[0].push(Device::Generator(dilithium));
         initial_state.floors[0].push(Device::Microchip(dilithium));
-        initial_state.floors[0].sort();
         let steps = minimum_steps(&initial_state);
         println!("It took {steps} steps to collect additional objects safely");
         Ok(())
@@ -440,9 +439,6 @@ mod tests {
         state.elevator_floor = 3;
         state.floors[3].push(Device::Generator(1));
         state.floors[3].push(Device::Microchip(1));
-        for i in 0..4 {
-            state.floors[i].sort();
-        }
         assert!(state.complete(), "Should be marked complete {state:?}");
     }
 
@@ -455,9 +451,6 @@ mod tests {
         state.floors[1].push(Device::Microchip(1));
         state.floors[2].push(Device::Microchip(2));
         state.floors[2].push(Device::Generator(2));
-        for i in 0..4 {
-            state.floors[i].sort();
-        }
         assert!(!state.complete(), "Should be marked incomplete {state:?}");
     }
 
@@ -470,9 +463,6 @@ mod tests {
         state.floors[1].push(Device::Microchip(1));
         state.floors[2].push(Device::Microchip(2));
         state.floors[2].push(Device::Generator(2));
-        for i in 0..4 {
-            state.floors[i].sort();
-        }
         assert!(state.valid(), "Should be marked valid {state:?}");
     }
 
@@ -485,9 +475,6 @@ mod tests {
         state.floors[1].push(Device::Microchip(2));
         state.floors[2].push(Device::Microchip(1));
         state.floors[2].push(Device::Generator(2));
-        for i in 0..4 {
-            state.floors[i].sort();
-        }
         assert!(!state.valid(), "Should be marked invalid {state:?}");
     }
 
@@ -500,11 +487,21 @@ mod tests {
         state.floors[1].push(Device::Microchip(1));
         state.floors[2].push(Device::Microchip(2));
         state.floors[2].push(Device::Generator(2));
-        for i in 0..4 {
-            state.floors[i].sort();
-        }
         let mut state2 = state.clone();
         state2.floors[0].push(Device::Generator(3));
         assert_ne!(state, state2, "Clone should be deep");
+    }
+
+    #[test]
+    fn priority_ordering_bug_fix() {
+        let a = StatePriority {
+            steps: 1,
+            closeness: 38,
+        };
+        let b = StatePriority {
+            steps: 2,
+            closeness: 42,
+        };
+        assert_eq!(std::cmp::Ordering::Greater, a.cmp(&b));
     }
 }

@@ -1,12 +1,11 @@
-use std::cmp::Reverse;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
 use lazy_regex::regex_captures;
-use priority_queue::PriorityQueue;
 
 use crate::day::Day;
+use crate::util::priority_queue::PriorityQueue;
 
 pub struct Day22;
 
@@ -152,7 +151,8 @@ impl Game {
 
 fn find_best_mana_path(game: Game) -> u32 {
     let mut games = PriorityQueue::new();
-    games.push(game, Reverse(game.mana_history));
+    // Don't Reverse the mana_history value, late game first works better for calculating our results
+    games.push(game, game.mana_history);
     let mut best_mana = u32::MAX;
     while let Some((game, _)) = games.pop() {
         if game.mana_history >= best_mana {
@@ -202,7 +202,7 @@ fn find_best_mana_path(game: Game) -> u32 {
                     continue;
                 }
                 game = game.end_turn(); // End Boss Turn
-                games.push(game, Reverse(game.mana_history));
+                games.push(game, game.mana_history);
             }
         }
     }

@@ -5,9 +5,9 @@ use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
 use lazy_regex::regex_captures;
-use priority_queue::PriorityQueue;
 
 use crate::day::Day;
+use crate::util::priority_queue::PriorityQueue;
 
 pub struct Day19;
 
