@@ -22,7 +22,7 @@ use crate::year_2016::{
     Day01 as y2016_d01, Day02 as y2016_d02, Day03 as y2016_d03, Day04 as y2016_d04,
     Day05 as y2016_d05, Day06 as y2016_d06, Day07 as y2016_d07, Day08 as y2016_d08,
     Day09 as y2016_d09, Day10 as y2016_d10, Day11 as y2016_d11, Day12 as y2016_d12,
-    Day13 as y2016_d13,
+    Day13 as y2016_d13, Day14 as y2016_d14,
 };
 
 fn main() -> Result<()> {
@@ -66,7 +66,7 @@ fn main() -> Result<()> {
             "2016-11" => y2016_d11::main()?,
             "2016-12" => y2016_d12::main()?,
             "2016-13" => y2016_d13::main()?,
-            // "2016-14" => y2016_d14::main()?,
+            "2016-14" => y2016_d14::main()?,
             // "2016-15" => y2016_d15::main()?,
             // "2016-16" => y2016_d16::main()?,
             // "2016-17" => y2016_d17::main()?,
