@@ -26,12 +26,27 @@ impl Number {
     }
 }
 
+#[derive(Clone, Debug)]
+struct Symbol {
+    adjacent_nums: Vec<u32>,
+    sym: char,
+}
+
+impl Symbol {
+    fn new(sym: char) -> Self {
+        Symbol {
+            adjacent_nums: Vec::new(),
+            sym,
+        }
+    }
+}
+
 pub struct Day03;
 
 impl Day for Day03 {
     fn main() -> Result<()> {
         let input = BufReader::new(File::open("input/2023/day03.txt")?);
-        let mut symbols: HashMap<Point2D<usize>, char> = HashMap::new();
+        let mut symbols: HashMap<Point2D<usize>, Symbol> = HashMap::new();
         let mut numbers: Vec<Number> = Vec::new();
         for (y, line) in input.lines().map(|l| l.unwrap()).enumerate() {
             let mut num_in_progress: Option<Number> = None;
@@ -55,10 +70,10 @@ impl Day for Day03 {
                         num_in_progress = None;
                     }
                     (sym, None) => {
-                        symbols.insert(Point2D::new(x, y), sym);
+                        symbols.insert(Point2D::new(x, y), Symbol::new(sym));
                     }
                     (sym, Some(num)) => {
-                        symbols.insert(Point2D::new(x, y), sym);
+                        symbols.insert(Point2D::new(x, y), Symbol::new(sym));
                         // End Number
                         numbers.push(num);
                         num_in_progress = None;
@@ -77,26 +92,30 @@ impl Day for Day03 {
             // check row above
             if let Some(y) = num.y.checked_sub(1) {
                 for x in low_x..=high_x {
-                    if symbols.contains_key(&Point2D::new(x, y)) {
+                    if let Some(sym) = symbols.get_mut(&Point2D::new(x, y)) {
+                        sym.adjacent_nums.push(num.value);
                         sum_of_parts += num.value;
                         continue 'number_sum;
                     }
                 }
             }
             // check left
-            if symbols.contains_key(&Point2D::new(low_x, num.y)) {
+            if let Some(sym) = symbols.get_mut(&Point2D::new(low_x, num.y)) {
+                sym.adjacent_nums.push(num.value);
                 sum_of_parts += num.value;
                 continue 'number_sum;
             }
             // check right
-            if symbols.contains_key(&Point2D::new(high_x, num.y)) {
+            if let Some(sym) = symbols.get_mut(&Point2D::new(high_x, num.y)) {
+                sym.adjacent_nums.push(num.value);
                 sum_of_parts += num.value;
                 continue 'number_sum;
             }
             // check row below
             if let Some(y) = num.y.checked_add(1) {
                 for x in low_x..=high_x {
-                    if symbols.contains_key(&Point2D::new(x, y)) {
+                    if let Some(sym) = symbols.get_mut(&Point2D::new(x, y)) {
+                        sym.adjacent_nums.push(num.value);
                         sum_of_parts += num.value;
                         continue 'number_sum;
                     }
@@ -104,6 +123,12 @@ impl Day for Day03 {
             }
         }
         println!("Sum of parts: {sum_of_parts}");
+        let ratio_sum: u32 = symbols
+            .values()
+            .filter(|sym| sym.sym == '*' && sym.adjacent_nums.len() == 2)
+            .map(|sym| sym.adjacent_nums[0] * sym.adjacent_nums[1])
+            .sum();
+        println!("Sum of ratios: {ratio_sum}");
         Ok(())
     }
 }
