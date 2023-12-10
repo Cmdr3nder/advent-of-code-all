@@ -25,7 +25,9 @@ use crate::year_2016::{
     Day09 as y2016_d09, Day10 as y2016_d10, Day11 as y2016_d11, Day12 as y2016_d12,
     Day13 as y2016_d13, Day14 as y2016_d14, Day15 as y2016_d15,
 };
-use crate::year_2023::{Day01 as y2023_d01, Day02 as y2023_d02, Day03 as y2023_d03};
+use crate::year_2023::{
+    Day01 as y2023_d01, Day02 as y2023_d02, Day03 as y2023_d03, Day04 as y2023_d04,
+};
 
 fn main() -> Result<()> {
     for argument in env::args() {
@@ -83,6 +85,7 @@ fn main() -> Result<()> {
             "2023-01" => y2023_d01::main()?,
             "2023-02" => y2023_d02::main()?,
             "2023-03" => y2023_d03::main()?,
+            "2023-04" => y2023_d04::main()?,
             "target/debug/advent-of-code-all" => {}
             x => println!("Unrecognized Argument: '{x}'"),
         };
