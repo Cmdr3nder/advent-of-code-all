@@ -86,40 +86,41 @@ impl Day for Day03 {
             }
         }
         let mut sum_of_parts = 0;
-        'number_sum: for num in numbers {
+        for num in numbers {
             let low_x = num.x_start.saturating_sub(1);
             let high_x = num.x_stop.saturating_add(1);
+            let mut is_part = false;
             // check row above
             if let Some(y) = num.y.checked_sub(1) {
                 for x in low_x..=high_x {
                     if let Some(sym) = symbols.get_mut(&Point2D::new(x, y)) {
                         sym.adjacent_nums.push(num.value);
-                        sum_of_parts += num.value;
-                        continue 'number_sum;
+                        is_part = true;
                     }
                 }
             }
             // check left
             if let Some(sym) = symbols.get_mut(&Point2D::new(low_x, num.y)) {
                 sym.adjacent_nums.push(num.value);
-                sum_of_parts += num.value;
-                continue 'number_sum;
+                is_part = true;
             }
             // check right
             if let Some(sym) = symbols.get_mut(&Point2D::new(high_x, num.y)) {
                 sym.adjacent_nums.push(num.value);
-                sum_of_parts += num.value;
-                continue 'number_sum;
+                is_part = true;
             }
             // check row below
             if let Some(y) = num.y.checked_add(1) {
                 for x in low_x..=high_x {
                     if let Some(sym) = symbols.get_mut(&Point2D::new(x, y)) {
                         sym.adjacent_nums.push(num.value);
-                        sum_of_parts += num.value;
-                        continue 'number_sum;
+                        is_part = true;
                     }
                 }
+            }
+
+            if is_part {
+                sum_of_parts += num.value;
             }
         }
         println!("Sum of parts: {sum_of_parts}");
