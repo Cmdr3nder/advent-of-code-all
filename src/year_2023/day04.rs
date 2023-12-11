@@ -2,9 +2,10 @@ use std::collections::HashSet;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 
 use crate::day::Day;
+use crate::util::expand::expand_with;
 
 fn score_for_count(count: usize) -> u32 {
     match count {
@@ -25,30 +26,46 @@ pub struct Day04;
 impl Day for Day04 {
     fn main() -> Result<()> {
         let input = BufReader::new(File::open("input/2023/day04.txt")?);
-        let cards: Vec<(HashSet<u32>, HashSet<u32>)> = input
-            .lines()
-            .map(|l| {
-                let line = l.unwrap();
-                let mut lr = line.split(": ").last().unwrap_or("").split(" | ").map(|g| {
-                    g.split(" ")
-                        .map(|n| n.trim().parse::<u32>())
-                        .filter(|n| n.is_ok())
-                        .map(|n| n.unwrap())
-                        .collect::<HashSet<u32>>()
-                });
-                match (lr.next(), lr.next()) {
-                    (Some(a), Some(b)) => Some((a, b)),
-                    _ => None,
-                }
-            })
-            .filter(|p| p.is_some())
-            .map(|p| p.unwrap())
-            .collect();
-        let points: u32 = cards
-            .iter()
-            .map(|(winning, have)| score_for_count(winning.intersection(have).count()))
-            .sum();
+        let mut card_copies = vec![1];
+        let mut points = 0;
+        let mut copies = 0;
+        for (line_number, line) in input.lines().map(|l| l.unwrap()).enumerate() {
+            let mut split = line
+                .split(": ")
+                .last()
+                .with_context(|| "Expected header and body split on ': '")?
+                .split(" | ");
+            let mut winning: HashSet<u32> = HashSet::new();
+            for n in split
+                .next()
+                .with_context(|| "Expected winning numbers")?
+                .split(" ")
+                .map(|s| s.trim())
+                .filter(|s| !s.is_empty())
+            {
+                winning.insert(n.parse()?);
+            }
+            let mut actuals: HashSet<u32> = HashSet::new();
+            for n in split
+                .next()
+                .with_context(|| "Expected actual numbers")?
+                .split(" ")
+                .map(|s| s.trim())
+                .filter(|s| !s.is_empty())
+            {
+                actuals.insert(n.parse()?);
+            }
+            let won = winning.intersection(&actuals).count();
+            points += score_for_count(won);
+            expand_with(&mut card_copies, line_number + won + 1, 1);
+            let copy_count = card_copies[line_number];
+            copies += copy_count;
+            for x in 1..=won {
+                card_copies[line_number + x] += copy_count;
+            }
+        }
         println!("Scratchits worth: {points}");
+        println!("Total copies: {copies}");
         Ok(())
     }
 }
