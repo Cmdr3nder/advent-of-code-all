@@ -8,6 +8,7 @@ use crate::day::Day;
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 enum Card {
+    Joker,
     Two,
     Three,
     Four,
@@ -42,6 +43,34 @@ impl Card {
             _ => bail!("Unexpected Card char '{ch}'"),
         })
     }
+
+    fn iterator() -> impl Iterator<Item = Card> {
+        [
+            Card::Joker,
+            Card::Two,
+            Card::Three,
+            Card::Four,
+            Card::Five,
+            Card::Six,
+            Card::Seven,
+            Card::Eight,
+            Card::Nine,
+            Card::Ten,
+            Card::Jack,
+            Card::Queen,
+            Card::King,
+            Card::Ace,
+        ]
+        .iter()
+        .copied()
+    }
+
+    fn to_alt(&self) -> Self {
+        match *self {
+            Card::Jack => Card::Joker,
+            x => x,
+        }
+    }
 }
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord)]
@@ -72,33 +101,31 @@ impl Hand {
         Ok(Hand { cards })
     }
 
+    fn to_alt(&self) -> Self {
+        let mut cards: [Card; 5] = self.cards.clone();
+        for i in 0..5 {
+            cards[i] = cards[i].to_alt();
+        }
+        Hand { cards }
+    }
+
     fn hand_type(&self) -> HandType {
         let mut counts: HashMap<Card, u8> = HashMap::new();
         for card in self.cards {
             *counts.entry(card).or_insert(0) += 1;
         }
-        match counts.len() {
-            1 => HandType::FiveOfAKind,
-            2 => {
-                let first_value = counts.values().next().map(|v| *v);
-                if first_value == Some(1) || first_value == Some(4) {
-                    HandType::FourOfAKind
-                } else {
-                    // 2 | 3
-                    HandType::FullHouse
-                }
-            }
-            3 => {
-                let first_value = counts.values().map(|v| *v).filter(|v| *v != 1).next();
-                if first_value == Some(3) {
-                    HandType::ThreeOfAKind
-                } else {
-                    // 2
-                    HandType::TwoPair
-                }
-            }
-            4 => HandType::OnePair,
-            _ => HandType::HighCard,
+        let joker_count = counts.remove(&Card::Joker).unwrap_or(0);
+        let max_count: u8 = counts.values().max().map(|v| *v).unwrap_or(0);
+        match (counts.len(), joker_count + max_count) {
+            (0, 5) => HandType::FiveOfAKind, // 5 Jokers
+            (1, 5) => HandType::FiveOfAKind,
+            (2, 4) => HandType::FourOfAKind,
+            (2, 3) => HandType::FullHouse,
+            (3, 3) => HandType::ThreeOfAKind,
+            (3, 2) => HandType::TwoPair,
+            (4, 2) => HandType::OnePair,
+            (5, 1) => HandType::HighCard,
+            x => panic!("Unhandled edge case in determining HandType {x:?}"),
         }
     }
 }
@@ -149,6 +176,17 @@ impl Day for Day07 {
             .map(|(i, (_, bid))| (i + 1) * bid)
             .sum();
         println!("Total Winnings in Camel Cards! {total_winnings}");
+        hands = hands
+            .iter()
+            .map(|(hand, bet)| (hand.to_alt(), *bet))
+            .collect();
+        hands.sort_by_key(|(hand, _)| *hand);
+        let total_winnings: usize = hands
+            .iter()
+            .enumerate()
+            .map(|(i, (_, bid))| (i + 1) * bid)
+            .sum();
+        println!("Total Winnings in Camel Cards, with Jokers! {total_winnings}");
         Ok(())
     }
 }
