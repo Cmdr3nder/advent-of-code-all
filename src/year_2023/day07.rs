@@ -44,27 +44,6 @@ impl Card {
         })
     }
 
-    fn iterator() -> impl Iterator<Item = Card> {
-        [
-            Card::Joker,
-            Card::Two,
-            Card::Three,
-            Card::Four,
-            Card::Five,
-            Card::Six,
-            Card::Seven,
-            Card::Eight,
-            Card::Nine,
-            Card::Ten,
-            Card::Jack,
-            Card::Queen,
-            Card::King,
-            Card::Ace,
-        ]
-        .iter()
-        .copied()
-    }
-
     fn to_alt(&self) -> Self {
         match *self {
             Card::Jack => Card::Joker,
