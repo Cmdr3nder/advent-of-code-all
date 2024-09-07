@@ -16,8 +16,8 @@ enum ValueSource {
 
 #[derive(Copy, Clone)]
 enum ValueTarget {
-    Output(usize),
-    Bot(usize),
+    Output,
+    Bot,
 }
 
 #[derive(Copy, Clone, Default)]
@@ -168,12 +168,12 @@ impl Day for Day10 {
                     "output" => {
                         expand(&mut outputs, low_num);
                         outputs[low_num].add_source(ValueSource::BotLow(bot_num))?;
-                        ValueTarget::Output(low_num)
+                        ValueTarget::Output
                     }
                     "bot" => {
                         expand(&mut bots, low_num);
                         bots[low_num].add_source(ValueSource::BotLow(bot_num))?;
-                        ValueTarget::Bot(low_num)
+                        ValueTarget::Bot
                     }
                     _ => bail!("Unexpected target '{low_target}'"),
                 };
@@ -181,12 +181,12 @@ impl Day for Day10 {
                     "output" => {
                         expand(&mut outputs, high_num);
                         outputs[high_num].add_source(ValueSource::BotHigh(bot_num))?;
-                        ValueTarget::Output(high_num)
+                        ValueTarget::Output
                     }
                     "bot" => {
                         expand(&mut bots, high_num);
                         bots[high_num].add_source(ValueSource::BotHigh(bot_num))?;
-                        ValueTarget::Bot(high_num)
+                        ValueTarget::Bot
                     }
                     _ => bail!("Unexpected target '{high_target}'"),
                 };
