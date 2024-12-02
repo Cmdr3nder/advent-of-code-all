@@ -101,6 +101,15 @@ impl<T: Ord> OrderedVec<T> {
     }
 }
 
+impl<'a, T: Ord> IntoIterator for &'a OrderedVec<T> {
+    type Item = &'a T;
+    type IntoIter = std::slice::Iter<'a, T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.items.iter()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
