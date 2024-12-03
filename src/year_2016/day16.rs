@@ -73,17 +73,10 @@ impl<'a> Disk<'a> {
         }
     }
 
-    fn len(&self) -> usize {
-        let actual_len: usize = self
-            .contents
-            .iter()
-            .map(|chunk| chunk.len(self.source.len()))
-            .sum();
-        actual_len.min(self.max_len)
-    }
-
     fn fill(&mut self) -> &mut Self {
-        while self.len() < self.max_len {
+        let mut len = self.source.len();
+        while len < self.max_len {
+            len = (len * 2) + 1;
             let iter = (0..self.contents.len()).rev();
             self.contents.push(DirectedChunk::Digit(Digit::Zero));
             for i in iter {
@@ -216,6 +209,10 @@ impl Day for Day16 {
             .collect();
         println!("Disk 1 Checksum: '{disk1_checksum}'");
         // TAKES TOO LONG TO COMPUTE PART 2, NEED TO RETHINK
+        // NOTE: I think it is the recalculate the length on each step that is
+        // killing us. Keep a running total via total = (total * 2) + 1; Can't
+        // believe I missed that...
+        // NOTE: Tried that, it probably helps, but is insufficient speedup
         let disk2_checksum: String = Disk::new(&input, 35651584)
             .fill()
             .checksum()
