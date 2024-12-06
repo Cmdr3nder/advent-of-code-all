@@ -1,3 +1,4 @@
+use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -21,6 +22,7 @@ impl Day for Day05 {
         let mut mode = ParseMode::Rules;
         let mut rules: HashMap<u32, HashSet<u32>> = HashMap::new();
         let mut sum_middle_pages = 0;
+        let mut sum_corrected = 0;
         for line in input.lines().map(|l| l.unwrap()) {
             match mode {
                 ParseMode::Rules => {
@@ -46,7 +48,7 @@ impl Day for Day05 {
                 }
                 ParseMode::Pages => {
                     // Parse & Check Page Order
-                    let pages = line
+                    let mut pages = line
                         .split(",")
                         .map(|page_str| {
                             page_str
@@ -82,11 +84,28 @@ impl Day for Day05 {
                     }
                     if good_order {
                         sum_middle_pages += pages[pages.len() / 2];
+                    } else {
+                        // Fix Page Order
+                        pages.sort_by(|a, b| {
+                            if let Some(pages_before) = rules.get(&a) {
+                                if pages_before.contains(&b) {
+                                    return Ordering::Greater;
+                                }
+                            }
+                            if let Some(pages_before) = rules.get(&b) {
+                                if pages_before.contains(&a) {
+                                    return Ordering::Less;
+                                }
+                            }
+                            a.cmp(b)
+                        });
+                        sum_corrected += pages[pages.len() / 2];
                     }
                 }
             }
         }
         println!("Correct middle page sum: {sum_middle_pages}");
+        println!("Corrected middle page sum: {sum_corrected}");
         Ok(())
     }
 }
