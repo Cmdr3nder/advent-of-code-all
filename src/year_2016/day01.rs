@@ -5,37 +5,11 @@ use anyhow::{bail, Result};
 
 use crate::data::Point2D;
 use crate::day::Day;
+use crate::util::cardinal::{Cardinal, Turn};
 
 pub struct Day01;
 
-#[derive(Copy, Clone)]
-enum Turn {
-    Right,
-    Left,
-}
-
-#[derive(Copy, Clone)]
-enum Cardinal {
-    North,
-    East,
-    South,
-    West,
-}
-
 impl Cardinal {
-    fn turn(self, turn: Turn) -> Self {
-        match (self, turn) {
-            (Cardinal::North, Turn::Right) => Cardinal::East,
-            (Cardinal::North, Turn::Left) => Cardinal::West,
-            (Cardinal::East, Turn::Right) => Cardinal::South,
-            (Cardinal::East, Turn::Left) => Cardinal::North,
-            (Cardinal::South, Turn::Right) => Cardinal::West,
-            (Cardinal::South, Turn::Left) => Cardinal::East,
-            (Cardinal::West, Turn::Right) => Cardinal::North,
-            (Cardinal::West, Turn::Left) => Cardinal::South,
-        }
-    }
-
     fn forward(self, raw_magnitude: u16) -> (i32, i32) {
         let magnitude: i32 = raw_magnitude.into();
         match self {
