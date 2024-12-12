@@ -4,7 +4,7 @@ pub enum Turn {
     Left,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub enum Cardinal {
     North,
     East,

@@ -8,7 +8,7 @@ use crate::data::Point2D;
 use crate::day::Day;
 use crate::util::cardinal::{Cardinal, Turn};
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 enum Tile {
     Obstruction,
     Empty,
@@ -54,7 +54,7 @@ impl Point2D<usize> {
     }
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Eq, Hash, PartialEq)]
 struct Guard {
     pos: Point2D<usize>,
     dir: Cardinal,
@@ -89,6 +89,34 @@ impl Guard {
     }
 }
 
+#[derive(Clone, Eq, PartialEq)]
+enum PathTermination {
+    Exited(HashSet<Guard>),
+    Looped,
+}
+
+fn execute_pathing(guard_start: &Guard, map: &GuardMap) -> PathTermination {
+    let mut guard = guard_start.clone();
+    let mut visited: HashSet<Guard> = HashSet::new();
+    visited.insert(guard);
+    while guard.step(&map) {
+        if visited.contains(&guard) {
+            return PathTermination::Looped;
+        } else {
+            visited.insert(guard);
+        }
+    }
+    PathTermination::Exited(visited)
+}
+
+fn unique_locations(visited: &HashSet<Guard>) -> usize {
+    let mut unique: HashSet<Point2D<usize>> = HashSet::new();
+    for v in visited {
+        unique.insert(v.pos);
+    }
+    unique.len()
+}
+
 pub struct Day06;
 
 impl Day for Day06 {
@@ -96,6 +124,7 @@ impl Day for Day06 {
         let input = BufReader::new(File::open("input/2024/day06.txt")?);
         let mut guard: Guard = Guard::new();
         let mut map: GuardMap = GuardMap::new();
+        // Prepare guard & map
         for (y, line) in input.lines().map(|l| l.unwrap()).enumerate() {
             for (x, ch) in line.chars().enumerate() {
                 let point = Point2D::new(x, y);
@@ -113,12 +142,33 @@ impl Day for Day06 {
                 }
             }
         }
-        let mut visited: HashSet<Point2D<usize>> = HashSet::new();
-        visited.insert(guard.pos);
-        while guard.step(&map) {
-            visited.insert(guard.pos);
+        if let PathTermination::Exited(visited) = execute_pathing(&guard, &map) {
+            println!(
+                "Unique guard visited positions: {}",
+                unique_locations(&visited)
+            );
+            let mut loop_count = 0;
+            for v in visited {
+                // If the next step is a valid empty tile then we should try filling it with an obstruction
+                if let Some(next) = v
+                    .pos
+                    .step(v.dir, 1)
+                    .filter(|n| n.y <= map.max.y && n.x <= map.max.x && map.get(n) == Tile::Empty)
+                {
+                    /* NOTE: need to check uniquness of block location and not
+                    re-exceute checked locations and not count duplicate locations
+                    in the loop_count. Pretty sure that will fix the bug.*/
+                    let mut alt_map = map.clone();
+                    alt_map.insert(next, Tile::Obstruction);
+                    if execute_pathing(&guard, &alt_map) == PathTermination::Looped {
+                        loop_count += 1;
+                    }
+                }
+            }
+            println!("Loop causing obstruction locations: {loop_count}");
+        } else {
+            bail!("Unexpected loop for first pathing.");
         }
-        println!("Unique guard visited positions: {}", visited.len());
         Ok(())
     }
 }
