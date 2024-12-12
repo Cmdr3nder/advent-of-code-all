@@ -147,17 +147,17 @@ impl Day for Day06 {
                 "Unique guard visited positions: {}",
                 unique_locations(&visited)
             );
+            let mut block_attempted: HashSet<Point2D<usize>> = HashSet::new();
             let mut loop_count = 0;
             for v in visited {
                 // If the next step is a valid empty tile then we should try filling it with an obstruction
-                if let Some(next) = v
-                    .pos
-                    .step(v.dir, 1)
-                    .filter(|n| n.y <= map.max.y && n.x <= map.max.x && map.get(n) == Tile::Empty)
-                {
-                    /* NOTE: need to check uniquness of block location and not
-                    re-exceute checked locations and not count duplicate locations
-                    in the loop_count. Pretty sure that will fix the bug.*/
+                if let Some(next) = v.pos.step(v.dir, 1).filter(|n| {
+                    n.y <= map.max.y
+                        && n.x <= map.max.x
+                        && map.get(n) == Tile::Empty
+                        && !block_attempted.contains(n)
+                }) {
+                    block_attempted.insert(next);
                     let mut alt_map = map.clone();
                     alt_map.insert(next, Tile::Obstruction);
                     if execute_pathing(&guard, &alt_map) == PathTermination::Looped {
