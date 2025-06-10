@@ -1,5 +1,4 @@
 use std::cmp::Ordering;
-use std::io::{BufRead, Cursor};
 
 use anyhow::{Context, Result};
 use lazy_regex::regex_captures;
@@ -13,10 +12,9 @@ pub struct Day01;
 impl Day for Day01 {
     fn main() -> Result<()> {
         let input_str = get_input(2024, 1)?;
-        let input = Cursor::new(input_str);
         let mut left_nums: OrderedVec<u32> = OrderedVec::new();
         let mut right_nums: OrderedVec<u32> = OrderedVec::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let (_, left_str, right_str) = regex_captures!("([0-9]+)\\s+([0-9]+)", &line)
                 .with_context(|| format!("Failed to match line regex {line}"))?;
             left_nums.push(left_str.parse()?);
