@@ -24,11 +24,11 @@ pub struct Day04;
 
 impl Day for Day04 {
     fn main() -> Result<()> {
-        let input_str = get_input(2023, 4)?;
+        let input = get_input(2023, 4)?;
         let mut card_copies = vec![1];
         let mut points = 0;
         let mut copies = 0;
-        for (line_number, line) in input_str.lines().enumerate() {
+        for (line_number, line) in input.lines().enumerate() {
             let mut split = line
                 .split(": ")
                 .last()

@@ -17,12 +17,12 @@ pub struct Day05;
 
 impl Day for Day05 {
     fn main() -> Result<()> {
-        let input_str = get_input(2024, 5)?;
+        let input = get_input(2024, 5)?;
         let mut mode = ParseMode::Rules;
         let mut rules: HashMap<u32, HashSet<u32>> = HashMap::new();
         let mut sum_middle_pages = 0;
         let mut sum_corrected = 0;
-        for line in input_str.lines() {
+        for line in input.lines() {
             match mode {
                 ParseMode::Rules => {
                     if line.is_empty() {

@@ -90,9 +90,9 @@ fn best_cookie(
 
 impl Day for Day15 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 15)?;
+        let input = get_input(2015, 15)?;
         let mut ingredients: Vec<Ingredient> = Vec::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             let (_, _name, capacity, durability, flavor, texture, calories) = regex_captures!(
                 "([A-Za-z]+): capacity ([-0-9]+), durability ([-0-9]+), flavor ([-0-9]+), texture ([-0-9]+), calories ([-0-9]+)",
                 &line,

@@ -136,9 +136,9 @@ pub struct Day07;
 
 impl Day for Day07 {
     fn main() -> Result<()> {
-        let input_str = get_input(2023, 7)?;
+        let input = get_input(2023, 7)?;
         let mut hands = Vec::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             let mut parts = line.split_whitespace();
             let hand = Hand::parse(parts.next().with_context(|| "Expected hand chars")?)?;
             let bet: usize = parts

@@ -8,10 +8,10 @@ pub struct Day08;
 
 impl Day for Day08 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 8)?;
+        let input = get_input(2015, 8)?;
         let mut diff_part_a: usize = 0;
         let mut diff_part_b: usize = 0;
-        for (ln, line) in input_str.lines().enumerate() {
+        for (ln, line) in input.lines().enumerate() {
             let last = line.len() - 1;
             let mut chars = line.chars().enumerate();
             while let Some((i, ch)) = chars.next() {

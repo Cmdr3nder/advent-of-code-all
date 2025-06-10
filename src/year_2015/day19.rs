@@ -12,10 +12,10 @@ pub struct Day19;
 
 impl Day for Day19 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 19)?;
+        let input = get_input(2015, 19)?;
         let mut reverse_map: HashMap<String, String> = HashMap::new();
         let mut medicine: String = String::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             if let Some((_, from, to)) = regex_captures!("([A-Za-z]+) => ([A-Za-z]+)", &line) {
                 if reverse_map.contains_key(to) {
                     // Check assumption about only one way to reverse a 'long' string

@@ -24,10 +24,10 @@ impl Sequence {
 
 impl Day for Day07 {
     fn main() -> Result<()> {
-        let input_str = get_input(2016, 7)?;
+        let input = get_input(2016, 7)?;
         let mut tls_count = 0;
         let mut ssl_count = 0;
-        for line in input_str.lines() {
+        for line in input.lines() {
             let chars: Vec<char> = line.chars().collect();
 
             // TLS Checks

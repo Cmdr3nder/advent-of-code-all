@@ -44,10 +44,10 @@ pub struct Day03;
 
 impl Day for Day03 {
     fn main() -> Result<()> {
-        let input_str = get_input(2023, 3)?;
+        let input = get_input(2023, 3)?;
         let mut symbols: HashMap<Point2D<usize>, Symbol> = HashMap::new();
         let mut numbers: Vec<Number> = Vec::new();
-        for (y, line) in input_str.lines().enumerate() {
+        for (y, line) in input.lines().enumerate() {
             let mut num_in_progress: Option<Number> = None;
             for (x, ch) in line.chars().enumerate() {
                 match (ch, num_in_progress) {

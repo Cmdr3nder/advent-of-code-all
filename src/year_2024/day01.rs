@@ -11,10 +11,10 @@ pub struct Day01;
 
 impl Day for Day01 {
     fn main() -> Result<()> {
-        let input_str = get_input(2024, 1)?;
+        let input = get_input(2024, 1)?;
         let mut left_nums: OrderedVec<u32> = OrderedVec::new();
         let mut right_nums: OrderedVec<u32> = OrderedVec::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             let (_, left_str, right_str) = regex_captures!("([0-9]+)\\s+([0-9]+)", &line)
                 .with_context(|| format!("Failed to match line regex {line}"))?;
             left_nums.push(left_str.parse()?);

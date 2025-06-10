@@ -8,10 +8,10 @@ pub struct Day05;
 
 impl Day for Day05 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 5)?;
+        let input = get_input(2015, 5)?;
         let mut nice_one: usize = 0;
         let mut nice_two: usize = 0;
-        for line in input_str.lines() {
+        for line in input.lines() {
             if regex_is_match!(".*[aeiou].*[aeiou].*[aeiou].*", &line)
                 && regex_is_match!(
                     "aa|bb|cc|dd|ee|ff|gg|hh|ii|jj|kk|ll|mm|nn|oo|pp|qq|rr|ss|tt|uu|vv|ww|xx|yy|zz",

@@ -73,9 +73,9 @@ const PLAYER_HEALTH: u32 = 100;
 
 impl Day for Day21 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 21)?;
+        let input = get_input(2015, 21)?;
         let mut boss = Creature::default();
-        for line in input_str.lines() {
+        for line in input.lines() {
             if let Some((_, armor)) = regex_captures!("Armor: ([0-9]+)", &line) {
                 boss.armor = armor.parse()?;
             }

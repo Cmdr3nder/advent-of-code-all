@@ -83,7 +83,7 @@ pub struct Day12;
 
 impl Day for Day12 {
     fn main() -> Result<()> {
-        let input_str = get_input(2016, 12)?;
+        let input = get_input(2016, 12)?;
         let mut register_names = StringIdMap::default();
         let mut registers: Vec<i32> = Vec::new();
         let a = register_names.to_id("a");
@@ -91,7 +91,7 @@ impl Day for Day12 {
         expand(&mut registers, a);
         expand(&mut registers, c);
         let mut instructions: Vec<Instruction> = Vec::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             if let Some((_, value, register)) = regex_captures!("cpy (-?[0-9]+) (a|b|c|d)", &line) {
                 let value: i32 = value.parse()?;
                 let register = register_names.to_id(register);

@@ -24,9 +24,9 @@ pub struct Day15;
 
 impl Day for Day15 {
     fn main() -> Result<()> {
-        let input_str = get_input(2016, 15)?;
+        let input = get_input(2016, 15)?;
         let mut discs: Vec<(usize, usize)> = Vec::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             if let Some((_, positions, initial_position)) = regex_captures!(
                 "Disc #[0-9]+ has ([0-9]+) positions; at time=0, it is at position ([0-9]+)",
                 &line

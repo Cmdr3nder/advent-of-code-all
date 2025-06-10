@@ -74,8 +74,8 @@ impl Day for Day16 {
             trees: Some(3),
             vizslas: Some(0),
         };
-        let input_str = get_input(2015, 16)?;
-        for line in input_str.lines() {
+        let input = get_input(2015, 16)?;
+        for line in input.lines() {
             let (_, num, stats) = regex_captures!("^Sue ([0-9]+): (.*)$", &line,)
                 .with_context(|| "Could not parse Sue")?;
             let mut aunt = Aunt::default();

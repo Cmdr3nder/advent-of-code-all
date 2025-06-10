@@ -210,9 +210,9 @@ fn find_best_mana_path(game: Game) -> u32 {
 
 impl Day for Day22 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 22)?;
+        let input = get_input(2015, 22)?;
         let mut game = Game::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             if let Some((_, damage)) = regex_captures!("Damage: ([0-9]+)", &line) {
                 game.boss_damage = damage.parse()?;
             }

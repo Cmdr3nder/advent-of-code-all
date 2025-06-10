@@ -33,12 +33,12 @@ impl Day for Day18 {
         .iter()
         .copied()
         .collect();
-        let input_str = get_input(2015, 18)?;
+        let input = get_input(2015, 18)?;
         let mut grid: [bool; GRID_SIZE] = [false; GRID_SIZE];
         let mut stuck_grid: [bool; GRID_SIZE] = [false; GRID_SIZE];
         {
             let mut idx = 0;
-            for line in input_str.lines() {
+            for line in input.lines() {
                 for ch in line.chars() {
                     let on = ch == '#';
                     grid[idx] = on;

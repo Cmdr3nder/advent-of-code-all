@@ -88,9 +88,9 @@ fn execute(
 
 impl Day for Day07 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 7)?;
+        let input = get_input(2015, 7)?;
         let mut instructions = HashMap::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             let (_, lh_name, lh_num, op, rh_name, rh_num, out) = regex_captures!(
                 "([a-z]+)?([0-9]+)? ?(AND|OR|LSHIFT|RSHIFT|NOT)? ?([a-z]+)?([0-9]+)? -> ([a-z]+)",
                 &line

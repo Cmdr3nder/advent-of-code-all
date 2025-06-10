@@ -38,9 +38,9 @@ pub struct Day06;
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input_str = get_input(2023, 6)?;
+        let input = get_input(2023, 6)?;
         let races: Vec<Race> = {
-            let mut lines = input_str.lines();
+            let mut lines = input.lines();
             let times = if let Some(line) = lines.next() {
                 if !line.starts_with("Time:") {
                     bail!("Expected list of times");

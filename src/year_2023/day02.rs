@@ -7,10 +7,10 @@ pub struct Day02;
 
 impl Day for Day02 {
     fn main() -> Result<()> {
-        let input_str = get_input(2023, 2)?;
+        let input = get_input(2023, 2)?;
         let mut id_sum = 0;
         let mut power_sum = 0;
-        for line in input_str.lines() {
+        for line in input.lines() {
             let parts: Vec<&str> = line.split(": ").collect();
             if parts.len() != 2 {
                 bail!("No header/body split for '{line}'");

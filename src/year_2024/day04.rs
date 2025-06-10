@@ -46,8 +46,8 @@ pub struct Day04;
 
 impl Day for Day04 {
     fn main() -> Result<()> {
-        let input_str = get_input(2024, 4)?;
-        let mat: Vec<Vec<char>> = input_str
+        let input = get_input(2024, 4)?;
+        let mat: Vec<Vec<char>> = input
             .lines()
             .map(|line| line.chars().collect())
             .collect();

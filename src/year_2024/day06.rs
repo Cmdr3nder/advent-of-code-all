@@ -120,11 +120,11 @@ pub struct Day06;
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input_str = get_input(2024, 6)?;
+        let input = get_input(2024, 6)?;
         let mut guard: Guard = Guard::new();
         let mut map: GuardMap = GuardMap::new();
         // Prepare guard & map
-        for (y, line) in input_str.lines().enumerate() {
+        for (y, line) in input.lines().enumerate() {
             for (x, ch) in line.chars().enumerate() {
                 let point = Point2D::new(x, y);
                 match ch {

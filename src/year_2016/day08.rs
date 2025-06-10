@@ -14,9 +14,9 @@ enum Pixel {
 
 impl Day for Day08 {
     fn main() -> Result<()> {
-        let input_str = get_input(2016, 8)?;
+        let input = get_input(2016, 8)?;
         let mut display = [[Pixel::Off; 50]; 6];
-        for line in input_str.lines() {
+        for line in input.lines() {
             if let Some((_, a, b)) = regex_captures!("rect ([0-9]+)x([0-9]+)", &line) {
                 let a: usize = a.parse()?;
                 let b: usize = b.parse()?;

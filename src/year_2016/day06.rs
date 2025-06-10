@@ -9,10 +9,10 @@ pub struct Day06;
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input_str = get_input(2016, 6)?;
+        let input = get_input(2016, 6)?;
         let mut char_counts: HashMap<(char, usize), u32> = HashMap::new();
         let mut max_pos = 0;
-        for line in input_str.lines() {
+        for line in input.lines() {
             for (i, ch) in line.chars().enumerate() {
                 char_counts
                     .entry((ch, i))

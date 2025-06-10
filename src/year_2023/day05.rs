@@ -215,11 +215,11 @@ pub struct Day05;
 
 impl Day for Day05 {
     fn main() -> Result<()> {
-        let input_str = get_input(2023, 5)?;
+        let input = get_input(2023, 5)?;
         let mut seeds: Vec<u64> = Vec::new();
         let mut phase: Option<Phase> = Some(Phase::Seeds);
         let mut maps = ProdMaps::default();
-        for line in input_str.lines() {
+        for line in input.lines() {
             if let Some(p) = phase {
                 match p {
                     Phase::Seeds => {

@@ -34,11 +34,11 @@ fn to_route(destinations: &mut StringIdMap, a: &str, b: &str) -> Route {
 
 impl Day for Day09 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 9)?;
+        let input = get_input(2015, 9)?;
         let mut destinations = StringIdMap::default();
         let mut edges: HashMap<Route, usize> = HashMap::new();
         let mut connections: HashMap<usize, Vec<usize>> = HashMap::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             let (_, a, b, length) = regex_captures!("(.+) to (.+) = ([0-9]+)", &line)
                 .with_context(|| format!("Failed to match line regex {line}"))?;
             let length: usize = length.parse()?;

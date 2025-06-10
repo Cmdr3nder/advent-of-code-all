@@ -48,10 +48,10 @@ fn find_best_happiness(
 
 impl Day for Day13 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 13)?;
+        let input = get_input(2015, 13)?;
         let mut people = StringIdMap::default();
         let mut happiness_chart: HashMap<(usize, usize), i64> = HashMap::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             let (_, person, sign, happiness, neighbor) = regex_captures!(
                 "([A-Za-z]+) would (gain|lose) ([0-9]+) happiness units by sitting next to ([A-Za-z]+)",
                 &line,

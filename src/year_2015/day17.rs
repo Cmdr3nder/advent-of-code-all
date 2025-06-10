@@ -9,10 +9,10 @@ const EXPECTED_NOG: u32 = 150;
 
 impl Day for Day17 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 17)?;
+        let input = get_input(2015, 17)?;
         let mut fills: Vec<(u32, u32)> = Vec::new(); // (container_count, fill_amount)
         fills.push((0, 0));
-        for line in input_str.lines() {
+        for line in input.lines() {
             let container: u32 = line
                 .parse()
                 .with_context(|| format!("Expected integer, got '{line}'"))?;

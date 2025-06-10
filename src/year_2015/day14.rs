@@ -29,10 +29,10 @@ impl Reindeer {
 
 impl Day for Day14 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 14)?;
+        let input = get_input(2015, 14)?;
         let mut reindeer: Vec<Reindeer> = Vec::with_capacity(10);
         let mut best_distance = u64::MIN;
-        for line in input_str.lines() {
+        for line in input.lines() {
             let (_, _name, fly_speed, fly_time_seconds, rest_time_seconds) = regex_captures!(
                 "([A-Za-z]+) can fly ([0-9]+) km/s for ([0-9]+) seconds, but then must rest for ([0-9]+) seconds.",
                 &line,

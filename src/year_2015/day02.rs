@@ -40,10 +40,10 @@ fn min(a: u32, b: u32, c: u32) -> u32 {
 
 impl Day for Day02 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 2)?;
+        let input = get_input(2015, 2)?;
         let mut wrapping_paper: u32 = 0;
         let mut ribbon: u32 = 0;
-        for line in input_str.lines() {
+        for line in input.lines() {
             if line.is_empty() {
                 continue;
             }

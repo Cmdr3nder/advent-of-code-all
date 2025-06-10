@@ -29,9 +29,9 @@ fn calculate_best_qe(weights: &[u64], compartments: u64) -> u64 {
 
 impl Day for Day24 {
     fn main() -> Result<()> {
-        let input_str = get_input(2015, 24)?;
+        let input = get_input(2015, 24)?;
         let mut weights: Vec<u64> = Vec::new();
-        for line in input_str.lines() {
+        for line in input.lines() {
             weights.push(line.parse()?);
         }
         let best_qe = calculate_best_qe(&weights, 3);

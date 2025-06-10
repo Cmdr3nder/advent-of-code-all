@@ -21,11 +21,11 @@ fn good_triangle(sides: [u32; 3]) -> bool {
 
 impl Day for Day03 {
     fn main() -> Result<()> {
-        let input_str = get_input(2016, 3)?;
+        let input = get_input(2016, 3)?;
         let mut horizontal_count = 0;
         let mut vertical_count = 0;
         let mut window = [[0u32; 3]; 3];
-        for (num, line) in input_str.lines().enumerate() {
+        for (num, line) in input.lines().enumerate() {
             let cycle = num % 3;
             if let Some((_, a, b, c)) = regex_captures!("([0-9]+)\\s+([0-9]+)\\s+([0-9]+)", &line) {
                 let a: u32 = a.parse()?;

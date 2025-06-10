@@ -35,10 +35,10 @@ fn is_safe_levels<'a, T: Iterator<Item = &'a u32>>(levels: T) -> bool {
 
 impl Day for Day02 {
     fn main() -> Result<()> {
-        let input_str = get_input(2024, 2)?;
+        let input = get_input(2024, 2)?;
         let mut safe_count = 0;
         let mut skip_safe_count = 0;
-        for line in input_str.lines() {
+        for line in input.lines() {
             let levels = line
                 .split(" ")
                 .map(|level_str| {
