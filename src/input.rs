@@ -35,8 +35,16 @@ fn fetch_input_from_web(year: u16, day: u8) -> Result<String> {
             continue;
         }
         
+        // Handle both formats: "session=value" and Netscape format
         if line.contains("session=") {
             jar.add_cookie_str(line, &url.parse().unwrap());
+        } else {
+            // Parse Netscape cookie format: domain flag path secure expiration name value
+            let parts: Vec<&str> = line.split('\t').collect();
+            if parts.len() >= 7 && parts[5] == "session" {
+                let cookie_str = format!("session={}", parts[6]);
+                jar.add_cookie_str(&cookie_str, &url.parse().unwrap());
+            }
         }
     }
     
