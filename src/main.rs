@@ -1,5 +1,6 @@
 mod data;
 mod day;
+mod input;
 mod util;
 mod year_2015;
 mod year_2016;

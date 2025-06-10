@@ -1,11 +1,11 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, Cursor};
 use std::str::FromStr;
 
 use anyhow::{Context, Error, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day02;
 
@@ -41,7 +41,8 @@ fn min(a: u32, b: u32, c: u32) -> u32 {
 
 impl Day for Day02 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day02.txt")?);
+        let input_str = get_input(2015, 2)?;
+        let input = input_str.as_bytes();
         let mut wrapping_paper: u32 = 0;
         let mut ribbon: u32 = 0;
         for line in input.lines().map(|l| l.unwrap()) {

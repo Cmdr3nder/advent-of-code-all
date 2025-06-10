@@ -1,18 +1,19 @@
 use std::cmp::Ordering;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use std::io::{BufRead, Cursor};
 
 use anyhow::{Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::ordered_vec::OrderedVec;
 
 pub struct Day01;
 
 impl Day for Day01 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2024/day01.txt")?);
+        let input_str = get_input(2024, 1)?;
+        let input = Cursor::new(input_str);
         let mut left_nums: OrderedVec<u32> = OrderedVec::new();
         let mut right_nums: OrderedVec<u32> = OrderedVec::new();
         for line in input.lines().map(|l| l.unwrap()) {

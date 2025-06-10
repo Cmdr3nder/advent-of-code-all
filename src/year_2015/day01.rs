@@ -1,14 +1,13 @@
-use std::fs;
-
 use anyhow::Result;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day01;
 
 impl Day for Day01 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2015/day01.txt")?;
+        let input = get_input(2015, 1)?;
         let mut floor: i64 = 0;
         let mut pos: usize = 0;
         for (idx, ch) in input.chars().enumerate() {
