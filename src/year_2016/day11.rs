@@ -1,13 +1,12 @@
 use std::cmp::Ordering;
 use std::collections::HashSet;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
 use lazy_regex::{regex, regex_captures};
 
 use crate::data::StringIdMap;
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::expand::expand;
 use crate::util::ordered_vec::OrderedVec;
 use crate::util::priority_queue::PriorityQueue;
@@ -291,10 +290,10 @@ impl PartialOrd for StatePriority {
 fn read_input() -> Result<(State, StringIdMap)> {
     let reg_microchip = regex!("([a-z]+)-compatible microchip");
     let reg_generator = regex!("([a-z]+) generator");
-    let input = BufReader::new(File::open("input/2016/day11.txt")?);
+    let input_str = get_input(2016, 11)?;
     let mut keywords = StringIdMap::default();
     let mut state = State::default();
-    for line in input.lines().map(|l| l.unwrap()) {
+    for line in input_str.lines() {
         if let Some((_, floor)) = regex_captures!("(first|second|third|fourth) floor", &line) {
             let floor = match floor {
                 "first" => 0,

@@ -1,10 +1,8 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::Result;
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day08;
 
@@ -16,9 +14,9 @@ enum Pixel {
 
 impl Day for Day08 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day08.txt")?);
+        let input_str = get_input(2016, 8)?;
         let mut display = [[Pixel::Off; 50]; 6];
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             if let Some((_, a, b)) = regex_captures!("rect ([0-9]+)x([0-9]+)", &line) {
                 let a: usize = a.parse()?;
                 let b: usize = b.parse()?;

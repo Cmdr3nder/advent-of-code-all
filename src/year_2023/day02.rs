@@ -1,18 +1,16 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{bail, Context, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day02;
 
 impl Day for Day02 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day02.txt")?);
+        let input_str = get_input(2023, 2)?;
         let mut id_sum = 0;
         let mut power_sum = 0;
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let parts: Vec<&str> = line.split(": ").collect();
             if parts.len() != 2 {
                 bail!("No header/body split for '{line}'");

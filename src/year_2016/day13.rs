@@ -1,10 +1,10 @@
 use std::collections::HashSet;
-use std::fs;
 
 use anyhow::Result;
 
 use crate::data::Point2D;
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::a_star::a_star;
 
 fn is_wall(point: Point2D<usize>, favorite_number: usize) -> bool {
@@ -48,7 +48,7 @@ fn cardinal_neighbors(point: Point2D<usize>, favorite_number: usize) -> Vec<Poin
 
 impl Day for Day13 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2016/day13.txt")?;
+        let input = get_input(2016, 13)?;
         let input = input.trim();
         let favorite_number: usize = input.parse()?;
         let start = Point2D::new(1, 1);

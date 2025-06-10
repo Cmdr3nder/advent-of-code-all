@@ -1,11 +1,10 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
 
 use crate::data::Point2D;
 use crate::day::Day;
+use crate::input::get_input;
 
 #[derive(Clone, Copy, Debug)]
 struct Number {
@@ -45,10 +44,10 @@ pub struct Day03;
 
 impl Day for Day03 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day03.txt")?);
+        let input_str = get_input(2023, 3)?;
         let mut symbols: HashMap<Point2D<usize>, Symbol> = HashMap::new();
         let mut numbers: Vec<Number> = Vec::new();
-        for (y, line) in input.lines().map(|l| l.unwrap()).enumerate() {
+        for (y, line) in input_str.lines().enumerate() {
             let mut num_in_progress: Option<Number> = None;
             for (x, ch) in line.chars().enumerate() {
                 match (ch, num_in_progress) {

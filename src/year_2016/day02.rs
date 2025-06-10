@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use crate::input::get_input;
 
 use anyhow::{bail, Result};
 
@@ -13,12 +12,12 @@ fn format_code(code: &[u8]) -> String {
 
 impl Day for Day02 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day02.txt")?);
+        let input_str = get_input(2016, 2)?;
         let mut key: u8 = 5;
         let mut code: Vec<u8> = Vec::new();
         let mut key_actual: u8 = 5;
         let mut code_actual: Vec<u8> = Vec::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             for ch in line.trim().chars() {
                 key = match (ch, key) {
                     ('U', 1) => 1,

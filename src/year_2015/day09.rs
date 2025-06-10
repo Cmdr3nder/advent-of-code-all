@@ -1,12 +1,11 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::data::StringIdMap;
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::peek::Peek;
 
 pub struct Day09;
@@ -35,11 +34,11 @@ fn to_route(destinations: &mut StringIdMap, a: &str, b: &str) -> Route {
 
 impl Day for Day09 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day09.txt")?);
+        let input_str = get_input(2015, 9)?;
         let mut destinations = StringIdMap::default();
         let mut edges: HashMap<Route, usize> = HashMap::new();
         let mut connections: HashMap<usize, Vec<usize>> = HashMap::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let (_, a, b, length) = regex_captures!("(.+) to (.+) = ([0-9]+)", &line)
                 .with_context(|| format!("Failed to match line regex {line}"))?;
             let length: usize = length.parse()?;

@@ -1,10 +1,8 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{bail, Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day16;
 
@@ -76,8 +74,8 @@ impl Day for Day16 {
             trees: Some(3),
             vizslas: Some(0),
         };
-        let input = BufReader::new(File::open("input/2015/day16.txt")?);
-        for line in input.lines().map(|l| l.unwrap()) {
+        let input_str = get_input(2015, 16)?;
+        for line in input_str.lines() {
             let (_, num, stats) = regex_captures!("^Sue ([0-9]+): (.*)$", &line,)
                 .with_context(|| "Could not parse Sue")?;
             let mut aunt = Aunt::default();

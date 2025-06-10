@@ -1,7 +1,6 @@
 use std::cmp::Reverse;
 use std::collections::{HashMap, HashSet};
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use crate::input::get_input;
 
 use anyhow::{bail, Result};
 use lazy_regex::regex_captures;
@@ -13,10 +12,10 @@ pub struct Day19;
 
 impl Day for Day19 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day19.txt")?);
+        let input_str = get_input(2015, 19)?;
         let mut reverse_map: HashMap<String, String> = HashMap::new();
         let mut medicine: String = String::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             if let Some((_, from, to)) = regex_captures!("([A-Za-z]+) => ([A-Za-z]+)", &line) {
                 if reverse_map.contains_key(to) {
                     // Check assumption about only one way to reverse a 'long' string
@@ -24,7 +23,7 @@ impl Day for Day19 {
                 }
                 reverse_map.insert(to.to_string(), from.to_string());
             } else if line != "" {
-                medicine = line;
+                medicine = line.to_string();
             }
         }
         let mut possibilities: HashSet<String> = HashSet::new();

@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use crate::input::get_input;
 
 use anyhow::Result;
 use itertools::Itertools;
@@ -30,9 +29,9 @@ fn calculate_best_qe(weights: &[u64], compartments: u64) -> u64 {
 
 impl Day for Day24 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day24.txt")?);
+        let input_str = get_input(2015, 24)?;
         let mut weights: Vec<u64> = Vec::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             weights.push(line.parse()?);
         }
         let best_qe = calculate_best_qe(&weights, 3);

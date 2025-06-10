@@ -1,15 +1,14 @@
-use std::fs;
-
 use anyhow::Result;
 use lazy_regex::regex_is_match;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day04;
 
 impl Day for Day04 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2015/day04.txt")?;
+        let input = get_input(2015, 4)?;
         let input = input.trim();
         let mut five_zeros: usize = 0;
         let mut six_zeros: usize = 0;

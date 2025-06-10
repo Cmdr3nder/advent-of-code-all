@@ -1,11 +1,9 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::data::Point2D;
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day06;
 
@@ -14,10 +12,10 @@ const DIMENSIONS: (Point2D<usize>, Point2D<usize>) =
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day06.txt")?);
+        let input_str = get_input(2015, 6)?;
         let mut lights_bool: [bool; 1_000_000] = [false; 1_000_000];
         let mut lights_num: [u32; 1_000_000] = [0; 1_000_000];
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let (_, action, x1, y1, x2, y2) = regex_captures!(
                 "(turn on|toggle|turn off) ([0-9]+),([0-9]+) through ([0-9]+),([0-9]+)",
                 &line

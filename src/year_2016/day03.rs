@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use crate::input::get_input;
 
 use anyhow::Result;
 use lazy_regex::regex_captures;
@@ -22,11 +21,11 @@ fn good_triangle(sides: [u32; 3]) -> bool {
 
 impl Day for Day03 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day03.txt")?);
+        let input_str = get_input(2016, 3)?;
         let mut horizontal_count = 0;
         let mut vertical_count = 0;
         let mut window = [[0u32; 3]; 3];
-        for (num, line) in input.lines().map(|l| l.unwrap()).enumerate() {
+        for (num, line) in input_str.lines().enumerate() {
             let cycle = num % 3;
             if let Some((_, a, b, c)) = regex_captures!("([0-9]+)\\s+([0-9]+)\\s+([0-9]+)", &line) {
                 let a: u32 = a.parse()?;

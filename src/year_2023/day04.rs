@@ -1,10 +1,9 @@
 use std::collections::HashSet;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::expand::expand_with;
 
 fn score_for_count(count: usize) -> u32 {
@@ -25,11 +24,11 @@ pub struct Day04;
 
 impl Day for Day04 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day04.txt")?);
+        let input_str = get_input(2023, 4)?;
         let mut card_copies = vec![1];
         let mut points = 0;
         let mut copies = 0;
-        for (line_number, line) in input.lines().map(|l| l.unwrap()).enumerate() {
+        for (line_number, line) in input_str.lines().enumerate() {
             let mut split = line
                 .split(": ")
                 .last()

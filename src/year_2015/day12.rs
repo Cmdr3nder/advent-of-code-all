@@ -1,10 +1,10 @@
-use std::fs;
 use std::iter::Sum;
 
 use anyhow::Result;
 use serde_json::{self, Value};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day12;
 
@@ -62,7 +62,7 @@ fn sum_numbers(value: &Value) -> SometimesRed {
 
 impl Day for Day12 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2015/day12.txt")?;
+        let input = get_input(2015, 12)?;
         let sums = sum_numbers(&serde_json::from_str(&input)?);
         println!("Sum of all numbers: {}", sums.0);
         println!("Sum of non-red numbers: {}", sums.1);

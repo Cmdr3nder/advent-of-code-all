@@ -1,12 +1,11 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::data::StringIdMap;
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day13;
 
@@ -49,10 +48,10 @@ fn find_best_happiness(
 
 impl Day for Day13 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day13.txt")?);
+        let input_str = get_input(2015, 13)?;
         let mut people = StringIdMap::default();
         let mut happiness_chart: HashMap<(usize, usize), i64> = HashMap::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let (_, person, sign, happiness, neighbor) = regex_captures!(
                 "([A-Za-z]+) would (gain|lose) ([0-9]+) happiness units by sitting next to ([A-Za-z]+)",
                 &line,

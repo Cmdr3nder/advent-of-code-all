@@ -1,10 +1,9 @@
 use std::cmp::Ordering;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day02;
 
@@ -36,10 +35,10 @@ fn is_safe_levels<'a, T: Iterator<Item = &'a u32>>(levels: T) -> bool {
 
 impl Day for Day02 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2024/day02.txt")?);
+        let input_str = get_input(2024, 2)?;
         let mut safe_count = 0;
         let mut skip_safe_count = 0;
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let levels = line
                 .split(" ")
                 .map(|level_str| {

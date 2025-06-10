@@ -1,8 +1,7 @@
-use std::fs;
-
 use anyhow::{bail, Context, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day11;
 
@@ -67,7 +66,7 @@ fn increment_password(password: &mut Vec<char>) -> Result<()> {
 
 impl Day for Day11 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2015/day11.txt")?;
+        let input = get_input(2015, 11)?;
         let mut password: Vec<char> = input.trim().chars().collect();
         let mut good_passwords: Vec<String> = Vec::with_capacity(2);
         while good_passwords.len() < 2 {

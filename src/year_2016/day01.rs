@@ -1,10 +1,10 @@
 use std::collections::HashSet;
-use std::fs;
 
 use anyhow::{bail, Result};
 
 use crate::data::Point2D;
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::cardinal::{Cardinal, Turn};
 
 pub struct Day01;
@@ -23,7 +23,7 @@ impl Cardinal {
 
 impl Day for Day01 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2016/day01.txt")?;
+        let input = get_input(2016, 1)?;
         let mut instructions: Vec<(Turn, u16)> = Vec::new();
         for raw in input.split(',') {
             let clean = raw.trim();

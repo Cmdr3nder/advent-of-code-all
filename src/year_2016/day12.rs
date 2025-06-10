@@ -1,11 +1,9 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{bail, Result};
 use lazy_regex::regex_captures;
 
 use crate::data::StringIdMap;
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::expand::expand;
 
 #[derive(Clone, Copy)]
@@ -85,7 +83,7 @@ pub struct Day12;
 
 impl Day for Day12 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day12.txt")?);
+        let input_str = get_input(2016, 12)?;
         let mut register_names = StringIdMap::default();
         let mut registers: Vec<i32> = Vec::new();
         let a = register_names.to_id("a");
@@ -93,7 +91,7 @@ impl Day for Day12 {
         expand(&mut registers, a);
         expand(&mut registers, c);
         let mut instructions: Vec<Instruction> = Vec::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             if let Some((_, value, register)) = regex_captures!("cpy (-?[0-9]+) (a|b|c|d)", &line) {
                 let value: i32 = value.parse()?;
                 let register = register_names.to_id(register);

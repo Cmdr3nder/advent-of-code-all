@@ -1,16 +1,15 @@
-use std::fs;
-
 use anyhow::{Context, Result};
 use lazy_regex::{regex_captures, regex_is_match};
 use md5;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day05;
 
 impl Day for Day05 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2016/day05.txt")?;
+        let input = get_input(2016, 5)?;
         let input = input.trim();
         let mut password: Vec<char> = Vec::new();
         let mut passcode: [Option<char>; 8] = [None; 8];

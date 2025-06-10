@@ -1,9 +1,7 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{Context, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day17;
 
@@ -11,10 +9,10 @@ const EXPECTED_NOG: u32 = 150;
 
 impl Day for Day17 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day17.txt")?);
+        let input_str = get_input(2015, 17)?;
         let mut fills: Vec<(u32, u32)> = Vec::new(); // (container_count, fill_amount)
         fills.push((0, 0));
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let container: u32 = line
                 .parse()
                 .with_context(|| format!("Expected integer, got '{line}'"))?;

@@ -1,14 +1,13 @@
-use std::fs;
-
 use anyhow::Result;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day10;
 
 impl Day for Day10 {
     fn main() -> Result<()> {
-        let mut sequence: Vec<char> = fs::read_to_string("input/2015/day10.txt")?
+        let mut sequence: Vec<char> = get_input(2015, 10)?
             .trim()
             .chars()
             .collect();

@@ -1,10 +1,8 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{bail, Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 fn find_drop_time(discs: &[(usize, usize)]) -> Option<usize> {
     for time in 0..=usize::MAX {
@@ -26,9 +24,9 @@ pub struct Day15;
 
 impl Day for Day15 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day15.txt")?);
+        let input_str = get_input(2016, 15)?;
         let mut discs: Vec<(usize, usize)> = Vec::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             if let Some((_, positions, initial_position)) = regex_captures!(
                 "Disc #[0-9]+ has ([0-9]+) positions; at time=0, it is at position ([0-9]+)",
                 &line

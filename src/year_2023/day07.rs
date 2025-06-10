@@ -1,10 +1,9 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 enum Card {
@@ -137,9 +136,9 @@ pub struct Day07;
 
 impl Day for Day07 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day07.txt")?);
+        let input_str = get_input(2023, 7)?;
         let mut hands = Vec::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let mut parts = line.split_whitespace();
             let hand = Hand::parse(parts.next().with_context(|| "Expected hand chars")?)?;
             let bet: usize = parts

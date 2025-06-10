@@ -1,10 +1,8 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day14;
 
@@ -31,10 +29,10 @@ impl Reindeer {
 
 impl Day for Day14 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day14.txt")?);
+        let input_str = get_input(2015, 14)?;
         let mut reindeer: Vec<Reindeer> = Vec::with_capacity(10);
         let mut best_distance = u64::MIN;
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let (_, _name, fly_speed, fly_time_seconds, rest_time_seconds) = regex_captures!(
                 "([A-Za-z]+) can fly ([0-9]+) km/s for ([0-9]+) seconds, but then must rest for ([0-9]+) seconds.",
                 &line,

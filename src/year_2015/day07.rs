@@ -1,11 +1,10 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day07;
 
@@ -89,9 +88,9 @@ fn execute(
 
 impl Day for Day07 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day07.txt")?);
+        let input_str = get_input(2015, 7)?;
         let mut instructions = HashMap::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let (_, lh_name, lh_num, op, rh_name, rh_num, out) = regex_captures!(
                 "([a-z]+)?([0-9]+)? ?(AND|OR|LSHIFT|RSHIFT|NOT)? ?([a-z]+)?([0-9]+)? -> ([a-z]+)",
                 &line

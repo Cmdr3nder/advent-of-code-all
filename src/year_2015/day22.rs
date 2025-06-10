@@ -1,5 +1,4 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use crate::input::get_input;
 
 use anyhow::Result;
 use lazy_regex::regex_captures;
@@ -211,9 +210,9 @@ fn find_best_mana_path(game: Game) -> u32 {
 
 impl Day for Day22 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day22.txt")?);
+        let input_str = get_input(2015, 22)?;
         let mut game = Game::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             if let Some((_, damage)) = regex_captures!("Damage: ([0-9]+)", &line) {
                 game.boss_damage = damage.parse()?;
             }

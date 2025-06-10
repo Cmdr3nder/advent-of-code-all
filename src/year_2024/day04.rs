@@ -1,9 +1,7 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{Context, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 struct XmasCounter {
     cache: [char; 4],
@@ -48,10 +46,10 @@ pub struct Day04;
 
 impl Day for Day04 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2024/day04.txt")?);
-        let mat: Vec<Vec<char>> = input
+        let input_str = get_input(2024, 4)?;
+        let mat: Vec<Vec<char>> = input_str
             .lines()
-            .map(|line| line.unwrap().chars().collect())
+            .map(|line| line.chars().collect())
             .collect();
         let y_len: usize = mat.len();
         let x_len: usize = mat

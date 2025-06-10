@@ -1,16 +1,16 @@
 use std::collections::HashMap;
-use std::fs;
 
 use anyhow::Result;
 
 use crate::data::Point2D;
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day03;
 
 impl Day for Day03 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2015/day03.txt")?;
+        let input = get_input(2015, 3)?;
         let mut y1_santa: Point2D<i32> = Point2D::default();
         let mut y2_santas: [Point2D<i32>; 2] = [Point2D::default(), Point2D::default()];
         let mut y1_visited: HashMap<Point2D<i32>, usize> = HashMap::new();

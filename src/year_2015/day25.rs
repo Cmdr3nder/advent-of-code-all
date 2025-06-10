@@ -1,9 +1,8 @@
-use std::fs;
-
 use anyhow::{Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 struct DiagonalIterator {
     row: usize,
@@ -35,7 +34,7 @@ pub struct Day25;
 
 impl Day for Day25 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2015/day25.txt")?;
+        let input = get_input(2015, 25)?;
         let (_, target_row, target_col) =
             regex_captures!(".+?row ([0-9]+).+?column ([0-9]+)", &input)
                 .with_context(|| "Couldn't parse input")?;

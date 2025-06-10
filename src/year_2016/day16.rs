@@ -1,8 +1,7 @@
-use std::fs;
-
 use anyhow::Result;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 #[derive(Copy, Clone, PartialEq)]
 enum Digit {
@@ -196,7 +195,7 @@ pub struct Day16;
 
 impl Day for Day16 {
     fn main() -> Result<()> {
-        let input: Vec<Digit> = (fs::read_to_string("input/2016/day16.txt")?)
+        let input: Vec<Digit> = get_input(2016, 16)?
             .chars()
             .filter(|ch| *ch == '1' || *ch == '0')
             .filter_map(|ch| Digit::from_char(&ch))

@@ -1,10 +1,8 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{bail, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::expand::expand;
 
 #[derive(Copy, Clone)]
@@ -146,10 +144,10 @@ pub struct Day10;
 
 impl Day for Day10 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day10.txt")?);
+        let input_str = get_input(2016, 10)?;
         let mut bots: Vec<Bot> = Vec::new();
         let mut outputs: Vec<Output> = Vec::new();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             if let Some((_, value, bot_num)) =
                 regex_captures!("value ([0-9]+) goes to bot ([0-9]+)", &line)
             {

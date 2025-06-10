@@ -1,19 +1,17 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{bail, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::is_hex::IsHex;
 
 pub struct Day08;
 
 impl Day for Day08 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day08.txt")?);
+        let input_str = get_input(2015, 8)?;
         let mut diff_part_a: usize = 0;
         let mut diff_part_b: usize = 0;
-        for (ln, line) in input.lines().map(|l| l.unwrap()).enumerate() {
+        for (ln, line) in input_str.lines().enumerate() {
             let last = line.len() - 1;
             let mut chars = line.chars().enumerate();
             while let Some((i, ch)) = chars.next() {

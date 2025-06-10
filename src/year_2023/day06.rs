@@ -1,10 +1,8 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{bail, Result};
 use itertools::Itertools;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 #[derive(Copy, Clone, Debug)]
 struct Race {
@@ -40,9 +38,9 @@ pub struct Day06;
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day06.txt")?);
+        let input_str = get_input(2023, 6)?;
         let races: Vec<Race> = {
-            let mut lines = input.lines().map(|l| l.unwrap());
+            let mut lines = input_str.lines();
             let times = if let Some(line) = lines.next() {
                 if !line.starts_with("Time:") {
                     bail!("Expected list of times");

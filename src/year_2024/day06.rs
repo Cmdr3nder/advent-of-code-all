@@ -1,11 +1,10 @@
 use std::collections::{HashMap, HashSet};
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
 
 use crate::data::Point2D;
 use crate::day::Day;
+use crate::input::get_input;
 use crate::util::cardinal::{Cardinal, Turn};
 
 #[derive(Clone, Copy, Eq, PartialEq)]
@@ -121,11 +120,11 @@ pub struct Day06;
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2024/day06.txt")?);
+        let input_str = get_input(2024, 6)?;
         let mut guard: Guard = Guard::new();
         let mut map: GuardMap = GuardMap::new();
         // Prepare guard & map
-        for (y, line) in input.lines().map(|l| l.unwrap()).enumerate() {
+        for (y, line) in input_str.lines().enumerate() {
             for (x, ch) in line.chars().enumerate() {
                 let point = Point2D::new(x, y);
                 match ch {

@@ -1,9 +1,8 @@
-use std::fs;
-
 use anyhow::Result;
 use md5;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 fn calculate_md5_hash<'a>(
     cache: &'a mut Vec<String>,
@@ -90,7 +89,7 @@ pub struct Day14;
 
 impl Day for Day14 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2016/day14.txt")?;
+        let input = get_input(2016, 14)?;
         let salt = input.trim();
         let index = index_of_64th(salt, 1);
         println!("Index {index} generates the 64th one-time pad key");

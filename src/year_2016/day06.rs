@@ -1,19 +1,18 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
 
 use crate::day::Day;
+use crate::input::get_input;
 
 pub struct Day06;
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day06.txt")?);
+        let input_str = get_input(2016, 6)?;
         let mut char_counts: HashMap<(char, usize), u32> = HashMap::new();
         let mut max_pos = 0;
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             for (i, ch) in line.chars().enumerate() {
                 char_counts
                     .entry((ch, i))

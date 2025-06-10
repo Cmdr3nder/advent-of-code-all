@@ -1,11 +1,10 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
 use std::ops::Range;
 
 use anyhow::{bail, Context, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 #[derive(Copy, Clone, Debug, Eq, Hash, PartialEq)]
 enum ProdMapName {
@@ -216,11 +215,11 @@ pub struct Day05;
 
 impl Day for Day05 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day05.txt")?);
+        let input_str = get_input(2023, 5)?;
         let mut seeds: Vec<u64> = Vec::new();
         let mut phase: Option<Phase> = Some(Phase::Seeds);
         let mut maps = ProdMaps::default();
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             if let Some(p) = phase {
                 match p {
                     Phase::Seeds => {

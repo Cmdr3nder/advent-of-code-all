@@ -1,6 +1,5 @@
 use std::collections::HashSet;
-use std::fs::File;
-use std::io::{BufRead, BufReader};
+use crate::input::get_input;
 
 use anyhow::{Context, Result};
 
@@ -34,12 +33,12 @@ impl Day for Day18 {
         .iter()
         .copied()
         .collect();
-        let input = BufReader::new(File::open("input/2015/day18.txt")?);
+        let input_str = get_input(2015, 18)?;
         let mut grid: [bool; GRID_SIZE] = [false; GRID_SIZE];
         let mut stuck_grid: [bool; GRID_SIZE] = [false; GRID_SIZE];
         {
             let mut idx = 0;
-            for line in input.lines().map(|l| l.unwrap()) {
+            for line in input_str.lines() {
                 for ch in line.chars() {
                     let on = ch == '#';
                     grid[idx] = on;

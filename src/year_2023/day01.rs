@@ -1,9 +1,7 @@
-use std::fs::File;
-use std::io::{BufRead, BufReader};
-
 use anyhow::{bail, Result};
 
 use crate::day::Day;
+use crate::input::get_input;
 
 fn digit_parse(ch: char) -> Result<u32> {
     Ok(match ch {
@@ -59,7 +57,7 @@ pub struct Day01;
 
 impl Day for Day01 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day01.txt")?);
+        let input_str = get_input(2023, 1)?;
         let mut observers = vec![
             Observer::new("0", 0),
             Observer::new("1", 1),
@@ -84,7 +82,7 @@ impl Day for Day01 {
         ];
         let mut sum = 0;
         let mut sum_spelled = 0;
-        for line in input.lines().map(|l| l.unwrap()) {
+        for line in input_str.lines() {
             let mut chars = line.chars().filter(|ch| ch.is_digit(10));
             if let Some(first_digit) = chars.next() {
                 let first_digit: u32 = digit_parse(first_digit)?;
