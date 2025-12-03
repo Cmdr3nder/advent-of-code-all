@@ -32,7 +32,7 @@ use crate::year_2023::{
 };
 use crate::year_2024::{
     Day01 as y2024_d01, Day02 as y2024_d02, Day03 as y2024_d03, Day04 as y2024_d04,
-    Day05 as y2024_d05, Day06 as y2024_d06, Day07 as y2024_d07,
+    Day05 as y2024_d05, Day06 as y2024_d06,
 };
 
 fn main() -> Result<()> {
@@ -119,7 +119,7 @@ fn main() -> Result<()> {
             "2024-04" => y2024_d04::main()?,
             "2024-05" => y2024_d05::main()?,
             "2024-06" => y2024_d06::main()?,
-            "2024-07" => y2024_d07::main()?,
+            // "2024-07" => y2024_d07::main()?,
             // "2024-08" => y2024_d08::main()?,
             // "2024-09" => y2024_d09::main()?,
             // "2024-10" => y2024_d10::main()?,

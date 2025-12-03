@@ -215,7 +215,7 @@ impl State {
             .floors
             .iter()
             .enumerate()
-            .map(|(i, f)| ((i + 1) * 2 * f.len()))
+            .map(|(i, f)| (i + 1) * 2 * f.len())
             .sum();
         empty_floor_count * 10000 + floor_score
     }
