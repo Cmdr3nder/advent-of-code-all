@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
@@ -31,7 +31,7 @@ impl Reindeer {
 
 impl Day for Day14 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day14.txt")?);
+        let input = BufReader::new(get_input(2015, 14)?);
         let mut reindeer: Vec<Reindeer> = Vec::with_capacity(10);
         let mut best_distance = u64::MIN;
         for line in input.lines().map(|l| l.unwrap()) {

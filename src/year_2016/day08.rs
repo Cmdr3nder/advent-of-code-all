@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
@@ -16,7 +16,7 @@ enum Pixel {
 
 impl Day for Day08 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day08.txt")?);
+        let input = BufReader::new(get_input(2016, 08)?);
         let mut display = [[Pixel::Off; 50]; 6];
         for line in input.lines().map(|l| l.unwrap()) {
             if let Some((_, a, b)) = regex_captures!("rect ([0-9]+)x([0-9]+)", &line) {

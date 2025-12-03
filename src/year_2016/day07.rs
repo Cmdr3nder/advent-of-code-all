@@ -1,5 +1,5 @@
+use crate::util::input::get_input;
 use std::collections::HashSet;
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
@@ -25,7 +25,7 @@ impl Sequence {
 
 impl Day for Day07 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day07.txt")?);
+        let input = BufReader::new(get_input(2016, 07)?);
         let mut tls_count = 0;
         let mut ssl_count = 0;
         for line in input.lines().map(|l| l.unwrap()) {

@@ -1,5 +1,5 @@
+use crate::util::input::get_input;
 use std::collections::HashSet;
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
@@ -25,7 +25,7 @@ pub struct Day04;
 
 impl Day for Day04 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day04.txt")?);
+        let input = BufReader::new(get_input(2023, 04)?);
         let mut card_copies = vec![1];
         let mut points = 0;
         let mut copies = 0;

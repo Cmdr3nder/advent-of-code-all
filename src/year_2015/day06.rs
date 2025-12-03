@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
@@ -14,7 +14,7 @@ const DIMENSIONS: (Point2D<usize>, Point2D<usize>) =
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day06.txt")?);
+        let input = BufReader::new(get_input(2015, 06)?);
         let mut lights_bool: [bool; 1_000_000] = [false; 1_000_000];
         let mut lights_num: [u32; 1_000_000] = [0; 1_000_000];
         for line in input.lines().map(|l| l.unwrap()) {

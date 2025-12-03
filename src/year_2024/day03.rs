@@ -1,4 +1,4 @@
-use std::fs;
+use crate::util::input::get_input_string;
 
 use anyhow::{bail, Context, Result};
 use lazy_regex::regex;
@@ -9,7 +9,7 @@ pub struct Day03;
 
 impl Day for Day03 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2024/day03.txt")?;
+        let input = get_input_string(2024, 03)?;
         let re = regex!(r"((mul)\(([0-9]{1,3}),([0-9]{1,3})\))|((do|don't)\(\))");
         let mut total_mult_sum = 0;
         let mut total_cond_mult_sum = 0;

@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
@@ -9,7 +9,7 @@ pub struct Day02;
 
 impl Day for Day02 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day02.txt")?);
+        let input = BufReader::new(get_input(2023, 02)?);
         let mut id_sum = 0;
         let mut power_sum = 0;
         for line in input.lines().map(|l| l.unwrap()) {

@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 use std::ops::{Add, Mul};
 
@@ -91,7 +91,7 @@ fn best_cookie(
 
 impl Day for Day15 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day15.txt")?);
+        let input = BufReader::new(get_input(2015, 15)?);
         let mut ingredients: Vec<Ingredient> = Vec::new();
         for line in input.lines().map(|l| l.unwrap()) {
             let (_, _name, capacity, durability, flavor, texture, calories) = regex_captures!(

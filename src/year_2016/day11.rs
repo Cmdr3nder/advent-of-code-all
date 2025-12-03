@@ -1,6 +1,6 @@
+use crate::util::input::get_input;
 use std::cmp::Ordering;
 use std::collections::HashSet;
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
@@ -291,7 +291,7 @@ impl PartialOrd for StatePriority {
 fn read_input() -> Result<(State, StringIdMap)> {
     let reg_microchip = regex!("([a-z]+)-compatible microchip");
     let reg_generator = regex!("([a-z]+) generator");
-    let input = BufReader::new(File::open("input/2016/day11.txt")?);
+    let input = BufReader::new(get_input(2016, 11)?);
     let mut keywords = StringIdMap::default();
     let mut state = State::default();
     for line in input.lines().map(|l| l.unwrap()) {

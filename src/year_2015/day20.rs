@@ -1,4 +1,4 @@
-use std::fs;
+use crate::util::input::get_input_string;
 
 use anyhow::Result;
 use integer_sqrt::IntegerSquareRoot;
@@ -37,7 +37,7 @@ where
 
 impl Day for Day20 {
     fn main() -> Result<()> {
-        let presents: usize = fs::read_to_string("input/2015/day20.txt")?.trim().parse()?;
+        let presents: usize = get_input_string(2015, 20)?.trim().parse()?;
         let mut d1 = false;
         let mut d2 = false;
         for house_num in 1..=presents {

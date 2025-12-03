@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
@@ -10,7 +10,7 @@ pub struct Day08;
 
 impl Day for Day08 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day08.txt")?);
+        let input = BufReader::new(get_input(2015, 08)?);
         let mut diff_part_a: usize = 0;
         let mut diff_part_b: usize = 0;
         for (ln, line) in input.lines().map(|l| l.unwrap()).enumerate() {

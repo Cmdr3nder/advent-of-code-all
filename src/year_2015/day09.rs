@@ -1,5 +1,5 @@
+use crate::util::input::get_input;
 use std::collections::HashMap;
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
@@ -35,7 +35,7 @@ fn to_route(destinations: &mut StringIdMap, a: &str, b: &str) -> Route {
 
 impl Day for Day09 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day09.txt")?);
+        let input = BufReader::new(get_input(2015, 09)?);
         let mut destinations = StringIdMap::default();
         let mut edges: HashMap<Route, usize> = HashMap::new();
         let mut connections: HashMap<usize, Vec<usize>> = HashMap::new();

@@ -1,5 +1,5 @@
+use crate::util::input::get_input;
 use std::collections::HashMap;
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
@@ -89,7 +89,7 @@ fn execute(
 
 impl Day for Day07 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day07.txt")?);
+        let input = BufReader::new(get_input(2015, 07)?);
         let mut instructions = HashMap::new();
         for line in input.lines().map(|l| l.unwrap()) {
             let (_, lh_name, lh_num, op, rh_name, rh_num, out) = regex_captures!(

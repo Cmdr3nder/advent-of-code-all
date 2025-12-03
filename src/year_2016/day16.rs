@@ -1,4 +1,4 @@
-use std::fs;
+use crate::util::input::get_input_string;
 
 use anyhow::Result;
 
@@ -196,7 +196,7 @@ pub struct Day16;
 
 impl Day for Day16 {
     fn main() -> Result<()> {
-        let input: Vec<Digit> = (fs::read_to_string("input/2016/day16.txt")?)
+        let input: Vec<Digit> = (get_input_string(2016, 16)?)
             .chars()
             .filter(|ch| *ch == '1' || *ch == '0')
             .filter_map(|ch| Digit::from_char(&ch))

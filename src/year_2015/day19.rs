@@ -1,6 +1,6 @@
+use crate::util::input::get_input;
 use std::cmp::Reverse;
 use std::collections::{HashMap, HashSet};
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
@@ -13,7 +13,7 @@ pub struct Day19;
 
 impl Day for Day19 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day19.txt")?);
+        let input = BufReader::new(get_input(2015, 19)?);
         let mut reverse_map: HashMap<String, String> = HashMap::new();
         let mut medicine: String = String::new();
         for line in input.lines().map(|l| l.unwrap()) {

@@ -1,5 +1,5 @@
+use crate::util::input::get_input_string;
 use std::collections::HashSet;
-use std::fs;
 
 use anyhow::{bail, Result};
 
@@ -23,7 +23,7 @@ impl Cardinal {
 
 impl Day for Day01 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2016/day01.txt")?;
+        let input = get_input_string(2016, 01)?;
         let mut instructions: Vec<(Turn, u16)> = Vec::new();
         for raw in input.split(',') {
             let clean = raw.trim();

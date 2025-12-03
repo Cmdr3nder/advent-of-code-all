@@ -1,5 +1,5 @@
+use crate::util::input::get_input;
 use std::collections::{HashMap, HashSet};
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
@@ -121,7 +121,7 @@ pub struct Day06;
 
 impl Day for Day06 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2024/day06.txt")?);
+        let input = BufReader::new(get_input(2024, 06)?);
         let mut guard: Guard = Guard::new();
         let mut map: GuardMap = GuardMap::new();
         // Prepare guard & map

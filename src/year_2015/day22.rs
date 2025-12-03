@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
@@ -211,7 +211,7 @@ fn find_best_mana_path(game: Game) -> u32 {
 
 impl Day for Day22 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day22.txt")?);
+        let input = BufReader::new(get_input(2015, 22)?);
         let mut game = Game::new();
         for line in input.lines().map(|l| l.unwrap()) {
             if let Some((_, damage)) = regex_captures!("Damage: ([0-9]+)", &line) {

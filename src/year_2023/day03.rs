@@ -1,5 +1,5 @@
+use crate::util::input::get_input;
 use std::collections::HashMap;
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
@@ -45,7 +45,7 @@ pub struct Day03;
 
 impl Day for Day03 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2023/day03.txt")?);
+        let input = BufReader::new(get_input(2023, 03)?);
         let mut symbols: HashMap<Point2D<usize>, Symbol> = HashMap::new();
         let mut numbers: Vec<Number> = Vec::new();
         for (y, line) in input.lines().map(|l| l.unwrap()).enumerate() {

@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
@@ -173,7 +173,7 @@ fn execute(program: &[Instruction], a: u32, b: u32) -> (u32, u32) {
 
 impl Day for Day23 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day23.txt")?);
+        let input = BufReader::new(get_input(2015, 23)?);
         let mut program: Vec<Instruction> = Vec::new();
         for line in input.lines().map(|l| l.unwrap()) {
             program.push(Instruction::from_line(&line)?);

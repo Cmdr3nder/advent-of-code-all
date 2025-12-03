@@ -1,4 +1,4 @@
-use std::fs;
+use crate::util::input::get_input_string;
 use std::iter::Sum;
 
 use anyhow::Result;
@@ -62,7 +62,7 @@ fn sum_numbers(value: &Value) -> SometimesRed {
 
 impl Day for Day12 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2015/day12.txt")?;
+        let input = get_input_string(2015, 12)?;
         let sums = sum_numbers(&serde_json::from_str(&input)?);
         println!("Sum of all numbers: {}", sums.0);
         println!("Sum of non-red numbers: {}", sums.1);

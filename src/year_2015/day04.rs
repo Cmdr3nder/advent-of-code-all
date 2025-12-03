@@ -1,4 +1,4 @@
-use std::fs;
+use crate::util::input::get_input_string;
 
 use anyhow::Result;
 use lazy_regex::regex_is_match;
@@ -9,7 +9,7 @@ pub struct Day04;
 
 impl Day for Day04 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2015/day04.txt")?;
+        let input = get_input_string(2015, 04)?;
         let input = input.trim();
         let mut five_zeros: usize = 0;
         let mut six_zeros: usize = 0;

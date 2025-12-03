@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
@@ -85,7 +85,7 @@ pub struct Day12;
 
 impl Day for Day12 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day12.txt")?);
+        let input = BufReader::new(get_input(2016, 12)?);
         let mut register_names = StringIdMap::default();
         let mut registers: Vec<i32> = Vec::new();
         let a = register_names.to_id("a");

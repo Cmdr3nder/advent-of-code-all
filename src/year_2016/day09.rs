@@ -1,4 +1,4 @@
-use std::fs;
+use crate::util::input::get_input_string;
 use std::iter::Peekable;
 
 use anyhow::{bail, Context, Result};
@@ -110,7 +110,7 @@ fn full_decompress_len(str: &str) -> Result<usize> {
 
 impl Day for Day09 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2016/day09.txt")?;
+        let input = get_input_string(2016, 09)?;
         let input = input.trim();
         println!("{} chars in decompressed output", decompress_len(input)?);
         println!(

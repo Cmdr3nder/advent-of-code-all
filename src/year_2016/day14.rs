@@ -1,4 +1,4 @@
-use std::fs;
+use crate::util::input::get_input_string;
 
 use anyhow::Result;
 use md5;
@@ -90,7 +90,7 @@ pub struct Day14;
 
 impl Day for Day14 {
     fn main() -> Result<()> {
-        let input = fs::read_to_string("input/2016/day14.txt")?;
+        let input = get_input_string(2016, 14)?;
         let salt = input.trim();
         let index = index_of_64th(salt, 1);
         println!("Index {index} generates the 64th one-time pad key");

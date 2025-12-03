@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
@@ -76,7 +76,7 @@ impl Day for Day16 {
             trees: Some(3),
             vizslas: Some(0),
         };
-        let input = BufReader::new(File::open("input/2015/day16.txt")?);
+        let input = BufReader::new(get_input(2015, 16)?);
         for line in input.lines().map(|l| l.unwrap()) {
             let (_, num, stats) = regex_captures!("^Sue ([0-9]+): (.*)$", &line,)
                 .with_context(|| "Could not parse Sue")?;

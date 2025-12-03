@@ -1,4 +1,4 @@
-use std::fs;
+use crate::util::input::get_input_string;
 
 use anyhow::Result;
 
@@ -8,10 +8,7 @@ pub struct Day10;
 
 impl Day for Day10 {
     fn main() -> Result<()> {
-        let mut sequence: Vec<char> = fs::read_to_string("input/2015/day10.txt")?
-            .trim()
-            .chars()
-            .collect();
+        let mut sequence: Vec<char> = get_input_string(2015, 10)?.trim().chars().collect();
         let mut forty_len = 0;
         let mut fifty_len = 0;
         for i in 1..=50 {

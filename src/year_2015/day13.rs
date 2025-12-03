@@ -1,5 +1,5 @@
+use crate::util::input::get_input;
 use std::collections::HashMap;
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
@@ -49,7 +49,7 @@ fn find_best_happiness(
 
 impl Day for Day13 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2015/day13.txt")?);
+        let input = BufReader::new(get_input(2015, 13)?);
         let mut people = StringIdMap::default();
         let mut happiness_chart: HashMap<(usize, usize), i64> = HashMap::new();
         for line in input.lines().map(|l| l.unwrap()) {

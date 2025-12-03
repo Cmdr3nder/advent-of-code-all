@@ -1,12 +1,12 @@
 use std::cmp::Ordering;
 use std::collections::{HashMap, HashSet};
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{Context, Result};
 use lazy_regex::regex_captures;
 
 use crate::day::Day;
+use crate::util::input::get_input;
 
 #[derive(Clone, Copy)]
 enum ParseMode {
@@ -18,7 +18,7 @@ pub struct Day05;
 
 impl Day for Day05 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2024/day05.txt")?);
+        let input = BufReader::new(get_input(2024, 05)?);
         let mut mode = ParseMode::Rules;
         let mut rules: HashMap<u32, HashSet<u32>> = HashMap::new();
         let mut sum_middle_pages = 0;

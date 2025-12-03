@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Result};
@@ -146,7 +146,7 @@ pub struct Day10;
 
 impl Day for Day10 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day10.txt")?);
+        let input = BufReader::new(get_input(2016, 10)?);
         let mut bots: Vec<Bot> = Vec::new();
         let mut outputs: Vec<Output> = Vec::new();
         for line in input.lines().map(|l| l.unwrap()) {

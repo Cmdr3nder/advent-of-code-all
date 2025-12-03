@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
@@ -22,7 +22,7 @@ fn good_triangle(sides: [u32; 3]) -> bool {
 
 impl Day for Day03 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day03.txt")?);
+        let input = BufReader::new(get_input(2016, 03)?);
         let mut horizontal_count = 0;
         let mut vertical_count = 0;
         let mut window = [[0u32; 3]; 3];

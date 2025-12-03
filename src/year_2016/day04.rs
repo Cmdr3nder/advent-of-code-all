@@ -1,5 +1,5 @@
+use crate::util::input::get_input;
 use std::collections::HashMap;
-use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 use anyhow::Result;
@@ -73,7 +73,7 @@ fn decode(str: &str, sector: u32) -> String {
 
 impl Day for Day04 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day04.txt")?);
+        let input = BufReader::new(get_input(2016, 04)?);
         let mut sector_sum: u32 = 0;
         for line in input.lines().map(|l| l.unwrap()) {
             if let Some((_, name, sector, checksum)) =

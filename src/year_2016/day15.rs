@@ -1,4 +1,4 @@
-use std::fs::File;
+use crate::util::input::get_input;
 use std::io::{BufRead, BufReader};
 
 use anyhow::{bail, Context, Result};
@@ -26,7 +26,7 @@ pub struct Day15;
 
 impl Day for Day15 {
     fn main() -> Result<()> {
-        let input = BufReader::new(File::open("input/2016/day15.txt")?);
+        let input = BufReader::new(get_input(2016, 15)?);
         let mut discs: Vec<(usize, usize)> = Vec::new();
         for line in input.lines().map(|l| l.unwrap()) {
             if let Some((_, positions, initial_position)) = regex_captures!(
