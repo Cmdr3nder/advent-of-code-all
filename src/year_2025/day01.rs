@@ -18,21 +18,23 @@ impl Day for Day01 {
         for line in input.lines().map(|l| l.unwrap()) {
             let (_, direction_str, magnitude_str) = regex_captures!("(L|R)([0-9]+)", &line)
                 .with_context(|| format!("Failed to match line regex {line}"))?;
-            let magnitude = magnitude_str.parse::<i32>()?;
-            match direction_str {
-                "L" => {
-                    dial -= magnitude;
-                }
-                "R" => {
-                    dial += magnitude;
-                }
+            let mut magnitude = magnitude_str.parse::<i32>()?;
+            let delta = match direction_str {
+                "L" => -1,
+                "R" => 1,
                 _ => bail!("Unexpected direction_str"),
-            }
-            count_new += (dial / 100).abs();
-            dial = dial % 100;
-            if dial < 0 {
-                dial += 100;
-                count_new += 1;
+            };
+            while magnitude > 0 {
+                dial += delta;
+                if dial == 0 {
+                    count_new += 1;
+                } else if dial == 100 {
+                    count_new += 1;
+                    dial = 0;
+                } else if dial == -1 {
+                    dial = 99;
+                }
+                magnitude -= 1;
             }
             if dial == 0 {
                 count += 1;
