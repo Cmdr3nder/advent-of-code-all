@@ -10,7 +10,7 @@ pub struct Day01;
 
 impl Day for Day01 {
     fn main() -> Result<()> {
-        let input = BufReader::new(get_input(2025, 01)?);
+        let input = BufReader::new(get_input(2025, 1)?);
         let mut count: u32 = 0;
         let mut count_new: i32 = 0;
         let mut dial: i32 = 50;
