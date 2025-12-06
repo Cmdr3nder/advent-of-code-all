@@ -7,7 +7,7 @@ use crate::util::input::get_input_string;
 pub struct Day02;
 
 fn is_invalid(n: u64) -> bool {
-    if n < 10 {
+    if n == 0 {
         return false;
     }
     let mut left = n;
@@ -31,19 +31,19 @@ fn is_invalid(n: u64) -> bool {
 }
 
 fn is_invalid_patterned(n: u64) -> bool {
-    if n < 10 {
+    if n == 0 {
         return false;
     }
-    let n = n.to_string();
-    let len = n.len();
-    for l in 1..len / 2 {
+    let s = n.to_string();
+    let len = s.len();
+    for l in 1..(len / 2) + 1 {
         if len % l == 0 {
             // Pattern can be evenly distributed
-            let pattern = &n[0..l];
+            let pattern = &s[0..l];
             let mut i = l;
             let mut matching = true;
             while i < len && matching {
-                let chunk = &n[i..i + l];
+                let chunk = &s[i..i + l];
                 i += l;
                 matching = pattern == chunk;
             }
@@ -109,6 +109,21 @@ mod tests {
         }
         for n in invalid {
             assert!(is_invalid(n), "Expected {n} to be invalid!");
+        }
+    }
+
+    #[test]
+    fn test_is_invalid_patterned() {
+        let valid: Vec<u64> = vec![0, 5, 9, 12, 13, 95, 115, 998, 1012, 1188511880, 222224];
+        let invalid: Vec<u64> = vec![
+            11, 22, 99, 111, 999, 1010, 1188511885, 222222, 446446, 38593859, 565656, 824824824,
+            2121212121,
+        ];
+        for n in valid {
+            assert!(!is_invalid_patterned(n), "Expected {n} to be valid!");
+        }
+        for n in invalid {
+            assert!(is_invalid_patterned(n), "Expected {n} to be invalid!");
         }
     }
 }
