@@ -22,51 +22,20 @@ fn char_u8(ch: char) -> Result<u8> {
     })
 }
 
-// fn max_joltage(battery_bank: &str) -> Result<u64> {
-//     let mut batteries = battery_bank.chars().enumerate();
-//     let (_, mut tens_joltage) = batteries
-//         .next()
-//         .with_context(|| "Too few batteries in battery bank")
-//         .and_then(|(i, ch)| Ok((i, char_u64(ch)?)))?;
-//     let (_, mut ones_joltage) = batteries
-//         .next()
-//         .with_context(|| "Too few batteries in battery bank")
-//         .and_then(|(i, ch)| Ok((i, char_u64(ch)?)))?;
-//     for (_, ch) in batteries {
-//         let battery_joltage = char_u64(ch)?;
-//         let current_joltage = (10 * tens_joltage) + ones_joltage;
-//         let with_tens_joltage = (10 * tens_joltage) + battery_joltage;
-//         let with_ones_joltage = (10 * ones_joltage) + battery_joltage;
-//         if current_joltage < with_ones_joltage {
-//             tens_joltage = ones_joltage;
-//             ones_joltage = battery_joltage;
-//         } else if current_joltage < with_tens_joltage {
-//             ones_joltage = battery_joltage;
-//         }
-//     }
-//     let joltage = (10 * tens_joltage) + ones_joltage;
-//     Ok(joltage)
-// }
-
 fn max_joltage(battery_bank: &[u8], battery_count: usize) -> u64 {
-    let mut battery_state: Vec<bool> = battery_bank.iter().map(|_| true).collect();
-    let mut turn_off_count = battery_bank.len() - battery_count;
-    let mut least_wanted: u8 = 0;
-    while turn_off_count > 0 && least_wanted <= 9 {
-        for i in 0..battery_state.len() {
-            if turn_off_count > 0 && battery_state[i] && battery_bank[i] == least_wanted {
-                battery_state[i] = false;
-                turn_off_count -= 1;
+    let mut battery_bank: Vec<u8> = battery_bank.iter().map(|n| *n).collect();
+    while battery_bank.len() > battery_count {
+        for i in 0..battery_bank.len() {
+            if i == battery_bank.len() - 1 || battery_bank[i] < battery_bank[i + 1] {
+                battery_bank.remove(i);
+                break;
             }
         }
-        least_wanted += 1;
     }
     let mut joltage: u64 = 0;
-    for i in 0..battery_state.len() {
-        if battery_state[i] {
-            joltage *= 10;
-            joltage += battery_bank[i] as u64;
-        }
+    for i in 0..battery_bank.len() {
+        joltage *= 10;
+        joltage += battery_bank[i] as u64;
     }
     joltage
 }
@@ -79,15 +48,17 @@ impl Day for Day03 {
     fn main() -> Result<()> {
         let input = BufReader::new(get_input(2025, 3)?);
 
-        let mut total_joltage = 0;
+        let mut total_joltage_2 = 0;
+        let mut total_joltage_12 = 0;
 
         for battery_bank_raw in input.lines().map(|l| l.unwrap()) {
             let battery_bank = parse_battery_bank(&battery_bank_raw)?;
-            let joltage = max_joltage(&battery_bank, 2);
-            total_joltage += joltage;
+            total_joltage_2 += max_joltage(&battery_bank, 2);
+            total_joltage_12 += max_joltage(&battery_bank, 12);
         }
 
-        println!("Total output joltage of the battery banks: {total_joltage}");
+        println!("Total output joltage of the battery banks (2): {total_joltage_2}");
+        println!("Total output joltage of the battery banks (12): {total_joltage_12}");
 
         Ok(())
     }
