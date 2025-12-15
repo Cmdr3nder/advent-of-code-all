@@ -6,7 +6,6 @@ use std::io::{BufRead, BufReader};
 
 use crate::day::Day;
 use crate::util::input::get_input;
-use crate::util::ordered_vec::OrderedVec;
 
 #[derive(Clone, Copy)]
 struct Point {
@@ -44,7 +43,7 @@ impl Day for Day08 {
 
         // Parse Points & Measure Distances
         let mut points: Vec<Point> = Vec::new();
-        let mut distances: OrderedVec<Distance> = OrderedVec::new();
+        let mut distances: Vec<Distance> = Vec::new();
         for (line_num, line) in input.lines().map(|l| l.unwrap()).enumerate() {
             let (_, x_str, y_str, z_str) = regex_captures!(r"([0-9]+),([0-9]+),([0-9]+)", &line)
                 .with_context(|| format!("No point on line {line_num}"))?;
@@ -60,20 +59,22 @@ impl Day for Day08 {
                     a: point_id,
                     b: pid,
                 };
-                distances.insert(distance);
-                if distances.len() > 1000 {
-                    distances.pop();
-                }
+                distances.push(distance);
             }
             points.push(point);
         }
+        distances.sort_unstable();
 
         // Build Circuits
         let mut circuits: Vec<Circuit> = Vec::new();
         let mut reusable_circuits: Vec<CircuitID> = Vec::new();
         let mut point_to_circuit: HashMap<PointID, CircuitID> = HashMap::new();
-        for distance in distances.into_iter().take(1000) {
+        let mut largest_product: usize = 0;
+        for (connections_made, distance) in
+            distances.into_iter().enumerate().map(|(c, d)| (c + 1, d))
+        {
             let mut extend_map: Vec<(PointID, CircuitID)> = Vec::new();
+            let mut done = false;
             match (
                 point_to_circuit.get(&distance.a),
                 point_to_circuit.get(&distance.b),
@@ -86,18 +87,24 @@ impl Day for Day08 {
                             circuits.push(Vec::new());
                             circuits.len() - 1
                         };
-                    circuits[circuit_id].push(distance.a);
-                    circuits[circuit_id].push(distance.b);
+                    let circuit = &mut circuits[circuit_id];
+                    circuit.push(distance.a);
+                    circuit.push(distance.b);
                     extend_map.push((distance.a, circuit_id));
                     extend_map.push((distance.b, circuit_id));
+                    done = circuit.len() == points.len();
                 }
                 (Some(circuit_id), None) => {
-                    circuits[*circuit_id].push(distance.b);
+                    let circuit = &mut circuits[*circuit_id];
+                    circuit.push(distance.b);
                     point_to_circuit.insert(distance.b, *circuit_id);
+                    done = circuit.len() == points.len();
                 }
                 (None, Some(circuit_id)) => {
-                    circuits[*circuit_id].push(distance.a);
+                    let circuit = &mut circuits[*circuit_id];
+                    circuit.push(distance.a);
                     point_to_circuit.insert(distance.a, *circuit_id);
+                    done = circuit.len() == points.len();
                 }
                 (Some(circuit_a_id), Some(circuit_b_id)) => {
                     if circuit_a_id != circuit_b_id {
@@ -112,22 +119,29 @@ impl Day for Day08 {
                             .collect();
                         // Free circuit_b for reuse
                         reusable_circuits.push(*circuit_b_id);
+                        done = circuits[*circuit_a_id].len() == points.len();
                     }
                 }
             }
             if extend_map.len() > 0 {
                 point_to_circuit.extend(extend_map.iter().map(|x| *x));
             }
+            if connections_made == 1000 {
+                largest_product = circuits
+                    .iter()
+                    .map(|c| c.len())
+                    .sorted_unstable()
+                    .rev()
+                    .take(3)
+                    .reduce(|a, b| a * b)
+                    .with_context(|| "No circuits?!")?;
+            }
+            if done {
+                let product_x_coords = points[distance.a].x * points[distance.b].x;
+                println!("Product of last X coords, {product_x_coords}");
+                break;
+            }
         }
-
-        let largest_product = circuits
-            .iter()
-            .map(|c| c.len())
-            .sorted_unstable()
-            .rev()
-            .take(3)
-            .reduce(|a, b| a * b)
-            .with_context(|| "No circuits?!")?;
 
         println!("Product of largest 3 circuits, {largest_product}");
 
