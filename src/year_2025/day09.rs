@@ -8,16 +8,44 @@ use std::u64;
 use crate::day::Day;
 use crate::util::input::get_input;
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 struct Point {
     x: u64,
     y: u64,
 }
 
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+struct Area {
+    area: u64,
+    low: Point,
+    high: Point,
+    a: Point,
+    b: Point,
+}
+
 impl Point {
-    pub fn rect_area(&self, other: &Self) -> u64 {
-        (self.x.abs_diff(other.x) + 1) * (self.y.abs_diff(other.y) + 1)
+    pub fn rect_area(&self, other: &Self) -> Area {
+        Area {
+            area: (self.x.abs_diff(other.x) + 1) * (self.y.abs_diff(other.y) + 1),
+            low: Point {
+                x: if self.x < other.x { self.x } else { other.x },
+                y: if self.y < other.y { self.y } else { other.y },
+            },
+            high: Point {
+                x: if self.x > other.x { self.x } else { other.x },
+                y: if self.y > other.y { self.y } else { other.y },
+            },
+            a: *self,
+            b: *other,
+        }
     }
+}
+
+enum PenState {
+    FindEdge,      // Pen up
+    FoundEdge,     // Pen up, but TBD
+    TraceEdge,     // Pen up, wait for next gap to FindEdge
+    TraceContents, // Pen down, wait for next edge to FoundEdge
 }
 
 struct Polygon {
@@ -95,29 +123,6 @@ impl Polygon {
             if let Some(first_point) = self.first_point {
                 // Finish outline
                 self.insert(first_point)?;
-                // Do infill
-                let mut flood_zone: Vec<Point> = Vec::new();
-                flood_zone.push(Point {
-                    x: (self.x_min + self.x_max) / 2,
-                    y: (self.y_min + self.y_max) / 2,
-                });
-                println!(
-                    "Extents ({}, {}) -> ({}, {})",
-                    self.x_min, self.y_min, self.x_max, self.y_max
-                );
-                while let Some(p) = flood_zone.pop() {
-                    if !self.outline.contains(&p) {
-                        self.outline.insert(p);
-                        flood_zone.push(Point { x: p.x, y: p.y + 1 });
-                        flood_zone.push(Point { x: p.x, y: p.y - 1 });
-                        flood_zone.push(Point { x: p.x + 1, y: p.y });
-                        flood_zone.push(Point { x: p.x - 1, y: p.y });
-                    }
-                    if p.x < self.x_min || p.x > self.x_max || p.y < self.y_min || p.y > self.y_max
-                    {
-                        bail!("Oops, picked a bad flood start point and reached outside the expected polygon reaches");
-                    }
-                }
                 // Finished
                 self.finished = true;
                 Ok(())
@@ -127,13 +132,14 @@ impl Polygon {
         }
     }
 
-    fn safe_area(&self, a: &Point, b: &Point) -> Result<bool> {
+    fn safe(&self, area: &Area) -> Result<bool> {
         if !self.finished {
-            bail!("Polygon must be finished before doing safe_area checks");
+            bail!("Polygon must be finished before doing safe checks");
         }
-        for x in a.x..=b.x {
-            for y in a.y..=b.y {
-                if !self.outline.contains(&Point { x, y }) {
+        for y in area.low.y..=area.high.y {
+            for x in self.x_min..=area.high.x {
+                let p = Point { x, y };
+                if !self.outline.contains(&p) {
                     return Ok(false);
                 }
             }
@@ -150,8 +156,8 @@ impl Day for Day09 {
 
         // Parse Points & Measure Basic Areas
         let mut red_tiles: Vec<Point> = Vec::new();
-        let mut polygon: Polygon = Polygon::new();
-        let mut largest_area: u64 = 0;
+        let mut areas: Vec<Area> = Vec::new();
+        let mut polygon = Polygon::new();
         for (line_num, line) in input.lines().map(|l| l.unwrap()).enumerate() {
             let (_, x_str, y_str) = regex_captures!(r"([0-9]+),([0-9]+)", &line)
                 .with_context(|| format!("No point on line {line_num}"))?;
@@ -160,31 +166,25 @@ impl Day for Day09 {
                 y: y_str.parse()?,
             };
             for tile in &red_tiles {
-                let area = new_tile.rect_area(tile);
-                if area > largest_area {
-                    largest_area = area;
-                }
+                areas.push(new_tile.rect_area(tile));
             }
             polygon.insert(new_tile)?;
             red_tiles.push(new_tile);
         }
 
-        println!("Largest area based on red tiles, {largest_area}");
+        areas.sort_unstable();
+        areas.reverse();
+
+        println!("Largest area based on red tiles, {}", areas[0].area,);
 
         polygon.finish()?;
-        largest_area = 0;
-        for i in 0..red_tiles.len() {
-            for j in i..red_tiles.len() {
-                let a = &red_tiles[i];
-                let b = &red_tiles[j];
-                let area = a.rect_area(b);
-                if area > largest_area && polygon.safe_area(a, b)? {
-                    largest_area = area;
-                }
+
+        for area in areas {
+            if polygon.safe(&area)? {
+                println!("Largest christmas area, {}", area.area);
+                break;
             }
         }
-
-        println!("Largest christmas area, {largest_area}");
 
         Ok(())
     }
