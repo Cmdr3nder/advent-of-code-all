@@ -13,15 +13,69 @@ struct Point {
     y: u64,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
+struct Range {
+    low: u64,
+    high: u64,
+}
+
+impl Range {
+    fn new(a: u64, b: u64) -> Self {
+        if a < b {
+            Range { low: a, high: b }
+        } else {
+            Range { low: b, high: a }
+        }
+    }
+
+    fn size(&self) -> u64 {
+        (self.high - self.low) + 1
+    }
+
+    fn overlaps(&self, other: &Range) -> bool {
+        self.low.max(other.low) <= self.high.min(other.high)
+    }
+
+    fn inner(&self) -> Option<Self> {
+        if self.size() < 3 {
+            // Squished out of existence
+            None
+        } else {
+            Some(Range {
+                low: self.low + 1,
+                high: self.high - 1,
+            })
+        }
+    }
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Ord, Hash)]
 struct Rectangle {
-    a: Point,
-    b: Point,
+    x: Range,
+    y: Range,
 }
 
 impl Rectangle {
+    fn new(a: &Point, b: &Point) -> Self {
+        Rectangle {
+            x: Range::new(a.x, b.x),
+            y: Range::new(a.y, b.y),
+        }
+    }
+
     fn area(&self) -> u64 {
-        (self.a.x.abs_diff(self.b.x) + 1) * (self.a.y.abs_diff(self.b.y) + 1)
+        self.x.size() * self.y.size()
+    }
+
+    fn overlaps(&self, other: &Rectangle) -> bool {
+        self.x.overlaps(&other.x) && self.y.overlaps(&other.y)
+    }
+
+    fn inner(&self) -> Option<Self> {
+        self.x
+            .inner()
+            .zip(self.y.inner())
+            .map(|(x, y)| Rectangle { x, y })
     }
 }
 
@@ -30,8 +84,8 @@ impl PartialOrd for Rectangle {
         Some(
             self.area()
                 .cmp(&other.area())
-                .then(self.a.cmp(&other.a))
-                .then(self.b.cmp(&other.b)),
+                .then(self.x.cmp(&other.x))
+                .then(self.y.cmp(&other.y)),
         )
     }
 }
@@ -55,27 +109,18 @@ impl Day for Day09 {
             };
             // Spawn red cornered rectangles
             for tile in &red_tiles {
-                red_zones.push(Rectangle {
-                    a: new_tile,
-                    b: *tile,
-                });
+                red_zones.push(Rectangle::new(&new_tile, tile));
             }
             // Draw outline
             if let Some(prev) = red_tiles.last() {
-                outline.push(Rectangle {
-                    a: *prev,
-                    b: new_tile,
-                });
+                outline.push(Rectangle::new(prev, &new_tile));
             }
             red_tiles.push(new_tile);
         }
 
         // Complete outline
         if let Some((first, last)) = red_tiles.first().zip(red_tiles.last()) {
-            outline.push(Rectangle {
-                a: *last,
-                b: *first,
-            });
+            outline.push(Rectangle::new(last, first));
         }
 
         // Sort red cornered rectangles
@@ -86,6 +131,18 @@ impl Day for Day09 {
             "Largest area based on red tiles, {}",
             red_zones.first().with_context(|| "No Red Zones?!")?.area()
         );
+
+        for red_zone in &red_zones {
+            if let Some(inner) = red_zone.inner() {
+                if !outline.iter().any(|line| inner.overlaps(line)) {
+                    println!("Christmas area, {}", red_zone.area());
+                    break;
+                }
+            } else {
+                println!("Christmas area, {}", red_zone.area());
+                break;
+            }
+        }
 
         Ok(())
     }
